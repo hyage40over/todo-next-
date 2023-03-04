@@ -18,7 +18,6 @@
     "@mui/material": "latest",
     "@next/font": "latest",
     "firebase": "^9.17.1",
-    "firebaseui": "^6.0.2",
     "next": "latest",
     "prop-types": "latest",
     "react": "latest",
