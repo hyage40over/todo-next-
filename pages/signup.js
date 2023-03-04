@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,14 +14,27 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/init"
+import Alert from '@mui/material/Alert';
 
 const theme = createTheme();
 
+const ErrorMessageAlert = (props) => {
+    if (props.errorMessage == "") {
+    return;
+    }
+    return (
+    <Box sx={{ marginY: 5 }}>
+        <Alert severity="error">{props.errorMessage}</Alert>
+    </Box>
+    );
+};
+
 export default function SignUp() {
-  const handleSubmit = async (event) => {
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
     const email = data.get('email');
     const password = data.get('password');
 
@@ -34,6 +47,7 @@ export default function SignUp() {
       const errorMessage = error.message;
       console.log("errorCode: ", errorCode);
       console.log("errorMessage: ", errorMessage);
+      setErrorMessage(errorMessage);
     }
   };
 
@@ -96,6 +110,7 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
+        <ErrorMessageAlert errorMessage={errorMessage} />
       </Container>
     </ThemeProvider>
   );

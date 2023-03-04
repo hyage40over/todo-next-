@@ -12,11 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-import Alert from '@mui/material/Alert';
-
-import { auth } from "../firebase/init"
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/init"
+import Alert from '@mui/material/Alert';
 
 const theme = createTheme();
 
@@ -24,7 +22,6 @@ const ErrorMessageAlert = (props) => {
   if (props.errorMessage == "") {
     return;
   }
-
   return (
     <Box sx={{ marginY: 5 }}>
       <Alert severity="error">{props.errorMessage}</Alert>
@@ -38,7 +35,6 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
     const email = data.get('email');
     const password = data.get('password');
 
