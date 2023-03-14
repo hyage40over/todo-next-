@@ -38,6 +38,7 @@ import Select from '@mui/material/Select';
 
 import TextField from '@mui/material/TextField';
 
+import { Scheduler } from "@aldabil/react-scheduler";
 
 
 
@@ -88,7 +89,7 @@ function AlertDialog() {
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
+        Open dialog
       </Button>
       <Dialog
         open={open}
@@ -134,57 +135,59 @@ function IconButtons() {
   );
 }
 
-
-function createData(hour, todo1, todo2, todo3, todo4, todo5, todo6, todo7) {
-  return { hour, todo1, todo2, todo3, todo4, todo5, todo6, todo7 };
-}
-
-const rows = [];
-for (let i = 0; i < 24; i++) {
-    rows.push(createData(i, '', '', '', '', '', '', ''));
-}
-
 export default function Home() {
   return (
     <Container>
         <IconButtons />
         <AlertDialog />
-
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>時間</TableCell>
-                        <TableCell>月</TableCell>
-                        <TableCell>火</TableCell>
-                        <TableCell>水</TableCell>
-                        <TableCell>木</TableCell>
-                        <TableCell>金</TableCell>
-                        <TableCell>土</TableCell>
-                        <TableCell>日</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                {rows.map((row) => (
-                    <TableRow
-                    key={row.hour}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                    <TableCell component="th" scope="row">
-                        {row.hour}
-                    </TableCell>
-                    <TableCell>{row.todo1}</TableCell>
-                    <TableCell>{row.todo2}</TableCell>
-                    <TableCell>{row.todo3}</TableCell>
-                    <TableCell>{row.todo4}</TableCell>
-                    <TableCell>{row.todo5}</TableCell>
-                    <TableCell>{row.todo6}</TableCell>
-                    <TableCell>{row.todo7}</TableCell>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Scheduler
+            view="week"
+            week={{
+              weekDays: [0, 1, 2, 3, 4, 5, 6],
+              weekStartOn: 0,
+              startHour: 9,
+              endHour: 17,
+              step: 60,
+              cellRenderer: ({ height, start, onClick, ...props }) => {
+                // Fake some condition up
+                const hour = start.getHours();
+                const disabled = hour === 12;
+                const restProps = disabled ? {} : props;
+                return (
+                  <Button
+                    style={{
+                      height: "100%",
+                      background: disabled ? "#eee" : "transparent",
+                      cursor: disabled ? "not-allowed" : "pointer"
+                    }}
+                    onClick={() => {
+                      if (disabled) {
+                        return alert("Opss");
+                      }
+                      onClick();
+                    }}
+                    disableRipple={disabled}
+                    // disabled={disabled}
+                    {...restProps}
+                  ></Button>
+                );
+              }
+            }}
+            events={[
+              {
+                event_id: 1,
+                title: "Event 1",
+                start: new Date("2023/3/14 09:30"),
+                end: new Date("2023/3/14 10:30"),
+              },
+              {
+                event_id: 2,
+                title: "Event 2",
+                start: new Date("2023/3/14 10:00"),
+                end: new Date("2023/3/14 11:00"),
+              },
+            ]}
+          />
     </Container>
   );
 }

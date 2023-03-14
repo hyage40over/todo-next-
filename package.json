@@ -10,6 +10,7 @@
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
   "dependencies": {
+    "@aldabil/react-scheduler": "^2.6.13",
     "@emotion/cache": "latest",
     "@emotion/react": "^11.10.6",
     "@emotion/server": "latest",
