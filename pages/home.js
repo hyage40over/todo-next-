@@ -1,21 +1,6 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AlarmIcon from '@mui/icons-material/Alarm';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -24,11 +9,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
 
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -37,13 +20,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import TextField from '@mui/material/TextField';
-
 import { Scheduler } from "@aldabil/react-scheduler";
-
-
-
-
-
+import ja from 'date-fns/locale/ja'
 
 function TimeSelect() {
   const [time, setTime] = React.useState('');
@@ -74,8 +52,7 @@ function TimeSelect() {
   );
 }
 
-
-function AlertDialog() {
+function InputDialog() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -87,9 +64,9 @@ function AlertDialog() {
   };
 
   return (
-    <div>
+    <div align="right">
       <Button variant="outlined" onClick={handleClickOpen}>
-        Open dialog
+        ToDo入力
       </Button>
       <Dialog
         open={open}
@@ -121,26 +98,49 @@ function AlertDialog() {
   );
 }
 
-
-function IconButtons() {
+function LogOffDialog() {
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = (test) => {
+    setOpen(false);
+  };
   return (
-    <Stack direction="row" spacing={1}>
-      <IconButton aria-label="previous">
-        <ArrowBackIosIcon />
-      </IconButton>
-      <IconButton aria-label="next">
-        <ArrowForwardIosIcon />
-      </IconButton>
-    </Stack>
+    <div align="right">
+      <Button variant="outlined" onClick={handleClickOpen}>
+        サインアウト
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle id="ToDo-imput">
+          {"LOGOUT"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="test">
+            ログアウトしますか？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>キャンセル</Button>
+          <Button onClick={handleClose} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 }
 
 export default function Home() {
   return (
     <Container>
-        <IconButtons />
-        <AlertDialog />
+        <LogOffDialog />
+        <InputDialog />
         <Scheduler
+            locale={ja}
             view="week"
             week={{
               weekDays: [0, 1, 2, 3, 4, 5, 6],
