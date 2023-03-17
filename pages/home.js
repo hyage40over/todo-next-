@@ -23,14 +23,10 @@ import TextField from '@mui/material/TextField';
 import { Scheduler } from "@aldabil/react-scheduler";
 import ja from 'date-fns/locale/ja'
 
-
 import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-
 import Menu from '@mui/material/Menu';
-
-
 
 
 
@@ -46,12 +42,6 @@ function PositionedMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-
-
-
-
-
 
   return (
     <div>
@@ -87,9 +77,6 @@ function PositionedMenu() {
   );
 }
 
-
-
-
 function BasicSelect() {
   const [age, setAge] = React.useState('');
 
@@ -116,25 +103,6 @@ function BasicSelect() {
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function InputWithIcon() {
   return (
     <Box align="right" sx={{ '& > :not(style)': { m: 1 } }}>
@@ -155,9 +123,6 @@ function InputWithIcon() {
     </Box>
   );
 }
-
-
-
 
 function TimeSelect() {
   const [time, setTime] = React.useState('');
