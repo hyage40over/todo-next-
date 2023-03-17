@@ -23,6 +23,142 @@ import TextField from '@mui/material/TextField';
 import { Scheduler } from "@aldabil/react-scheduler";
 import ja from 'date-fns/locale/ja'
 
+
+import InputAdornment from '@mui/material/InputAdornment';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+
+
+import Menu from '@mui/material/Menu';
+
+
+
+
+
+
+
+
+function PositionedMenu() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+
+
+
+
+
+  return (
+    <div>
+      <Button
+        id="demo-positioned-button"
+        aria-controls={open ? 'demo-positioned-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        メニュー
+      </Button>
+      <Menu
+        id="demo-positioned-menu"
+        aria-labelledby="demo-positioned-button"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>アカウント</MenuItem>
+        <MenuItem onClick={handleClose}>ログアウト</MenuItem>
+      </Menu>
+    </div>
+  );
+}
+
+
+
+
+function BasicSelect() {
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  return (
+    <Box sx={{ minWidth: 50 }}>
+      <FormControl>
+        <InputLabel id="demo-simple-select-label">選択</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+        <MenuItem value={10}>最優先</MenuItem>
+        <MenuItem value={20}>普通</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function InputWithIcon() {
+  return (
+    <Box align="right" sx={{ '& > :not(style)': { m: 1 } }}>
+      <TextField
+        id="outlined-read-only-input"
+        label="アカウント"
+        InputProps={{
+          readOnly: true,
+          startAdornment: (
+            <InputAdornment position="start">
+              <AccountCircle />
+            </InputAdornment>
+          ),
+        }}
+        defaultValue="アカウント名"
+      />
+      < PositionedMenu />
+    </Box>
+  );
+}
+
+
+
+
 function TimeSelect() {
   const [time, setTime] = React.useState('');
 
@@ -51,6 +187,7 @@ function TimeSelect() {
     </Box>
   );
 }
+
 
 function InputDialog() {
   const [open, setOpen] = React.useState(false);
@@ -137,6 +274,7 @@ function LogOffDialog() {
 export default function Home() {
   return (
     <Container>
+        <InputWithIcon />
         <LogOffDialog />
         <InputDialog />
         <Scheduler
