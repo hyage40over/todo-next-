@@ -21,6 +21,7 @@ import Select from '@mui/material/Select';
 
 import TextField from '@mui/material/TextField';
 import { Scheduler } from "@aldabil/react-scheduler";
+
 import ja from 'date-fns/locale/ja'
 
 import InputAdornment from '@mui/material/InputAdornment';
@@ -28,12 +29,60 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import Menu from '@mui/material/Menu';
 
+import Avatar from '@mui/material/Avatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
 
 
 
 
 
-function PositionedMenu() {
+
+
+function LogOffDialog() {
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = (test) => {
+    setOpen(false);
+  };
+  return (
+    <div align="right">
+      <Button variant="outlined" onClick={handleClickOpen}>
+        ログアウト
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle id="ToDo-imput">
+          {"LOGOUT"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="test">
+            ログアウトしますか？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>キャンセル</Button>
+          <Button onClick={handleClose} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+
+function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -42,40 +91,90 @@ function PositionedMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
-    <div>
-      <Button
-        id="demo-positioned-button"
-        aria-controls={open ? 'demo-positioned-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        メニュー
-      </Button>
+    <React.Fragment>
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }} >
+        <Typography sx={{ minWidth: 100 }}>Contact</Typography>
+        <Typography sx={{ minWidth: 100 }}>Profile</Typography>
+        <Tooltip title="Account settings">
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            sx={{ ml: 2 }}
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+          >
+            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Menu
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}
+        id="account-menu"
         open={open}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
         }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>アカウント</MenuItem>
-        <MenuItem onClick={handleClose}>ログアウト</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Avatar /> Profile
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Avatar /> My account
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <PersonAdd fontSize="small" />
+          </ListItemIcon>
+          Add another account
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
       </Menu>
-    </div>
+    </React.Fragment>
   );
 }
+
+
 
 function BasicSelect() {
   const [age, setAge] = React.useState('');
@@ -117,9 +216,8 @@ function InputWithIcon() {
             </InputAdornment>
           ),
         }}
-        defaultValue="アカウント名"
+        defaultValue="アカウント-ユーザー名"
       />
-      < PositionedMenu />
     </Box>
   );
 }
@@ -200,57 +298,24 @@ function InputDialog() {
   );
 }
 
-function LogOffDialog() {
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = (test) => {
-    setOpen(false);
-  };
-  return (
-    <div align="right">
-      <Button variant="outlined" onClick={handleClickOpen}>
-        サインアウト
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle id="ToDo-imput">
-          {"LOGOUT"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="test">
-            ログアウトしますか？
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>キャンセル</Button>
-          <Button onClick={handleClose} autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
-
 export default function Home() {
   return (
     <Container>
         <InputWithIcon />
+        <AccountMenu />
         <LogOffDialog />
         <InputDialog />
         <Scheduler
             locale={ja}
-            view="week"
+            //disableViewNavigator = {false}
+            //navigationPickerProps = {"renderInput"}
             week={{
               weekDays: [0, 1, 2, 3, 4, 5, 6],
               weekStartOn: 0,
               startHour: 9,
               endHour: 17,
               step: 60,
+              navigation: true,
               cellRenderer: ({ height, start, onClick, ...props }) => {
                 // Fake some condition up
                 const hour = start.getHours();
