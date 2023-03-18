@@ -54,7 +54,7 @@ function LogOffDialog() {
     setOpen(false);
   };
   return (
-    <div align="right">
+    <div>
       <Button variant="outlined" onClick={handleClickOpen}>
         ログアウト
       </Button>
@@ -93,9 +93,9 @@ function AccountMenu() {
   };
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }} >
-        <Typography sx={{ minWidth: 100 }}>Contact</Typography>
-        <Typography sx={{ minWidth: 100 }}>Profile</Typography>
+      <Box sx={{ display: undefined, alignItems: undefined, textAlign: undefined }} >
+        {/*<Typography sx={{ minWidth: 100 }}>Contact</Typography>*/}
+        {/*<Typography sx={{ minWidth: 100 }}>Profile</Typography>*/}
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -105,7 +105,7 @@ function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 100, height: 64 }}>Account Menu</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -204,7 +204,7 @@ function BasicSelect() {
 
 function InputWithIcon() {
   return (
-    <Box align="right" sx={{ '& > :not(style)': { m: 1 } }}>
+    <Box sx={{ '& > :not(style)': { m: 1 } }}>
       <TextField
         id="outlined-read-only-input"
         label="アカウント"
@@ -264,7 +264,7 @@ function InputDialog() {
   };
 
   return (
-    <div align="right">
+    <div>
       <Button variant="outlined" onClick={handleClickOpen}>
         ToDo入力
       </Button>
@@ -301,10 +301,12 @@ function InputDialog() {
 export default function Home() {
   return (
     <Container>
-        <InputWithIcon />
-        <AccountMenu />
-        <LogOffDialog />
-        <InputDialog />
+        <div align="right">
+          <InputWithIcon />        
+          <AccountMenu />
+          <LogOffDialog />
+          <InputDialog />
+        </div>
         <Scheduler
             locale={ja}
             //disableViewNavigator = {false}
