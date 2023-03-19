@@ -1,31 +1,15 @@
 import * as React from 'react';
-import { auth } from "../firebase/init"
-import { useRouter } from "next/router"
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
 import { useAuthContext } from "../src/context/AuthContext"
 
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 import LogOffDialog from "../components/LogOffDialog"
-
-
-
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import SettingDialog from "../components/SettingDialog"
+import InputDialog from "../components/InputDialog"
 
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 import TextField from '@mui/material/TextField';
 import { Scheduler } from "@aldabil/react-scheduler";
@@ -41,50 +25,10 @@ import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-
-
-
-
-
-function SettingDialog({isOpen, onClickClose}) {
-  const router = useRouter()
-  const handleClickDeleteAccount = async () => {
-    await signOut(auth)
-    await router.push("/login")
-  };
-  return (
-    <div>
-      <Dialog
-        open={isOpen}
-        onClose={onClickClose}
-      >
-        <DialogTitle id="Setting">
-          {"LOGOUT"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="Setting-text">
-            アカウントを削除しますか？
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClickClose}>キャンセル</Button>
-          <Button onClick={handleClickDeleteAccount} autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
-
-
-
-
 
 function AccountMenu({onClickLogout, onClickSetting}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -178,34 +122,6 @@ function AccountMenu({onClickLogout, onClickSetting}) {
   );
 }
 
-
-
-function BasicSelect() {
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
-  return (
-    <Box sx={{ minWidth: 50 }}>
-      <FormControl>
-        <InputLabel id="demo-simple-select-label">選択</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-        <MenuItem value={10}>最優先</MenuItem>
-        <MenuItem value={20}>普通</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
-  );
-}
-
 function InputWithIcon() {
   const { user } = useAuthContext()
   console.log("user---------", user);
@@ -228,103 +144,6 @@ function InputWithIcon() {
     </Box>
   );
 }
-
-function TimeSelect() {
-  const [time, setTime] = React.useState('');
-
-  const handleChange = (event) => {
-    setTime(event.target.value);
-  };
-
-  return (
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Time</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={time}
-          label="Time"
-          onChange={handleChange}
-        >
-        {[...Array(24)].map((_, i) => {
-          return (
-            <MenuItem value={i}>{i}</MenuItem>
-          );
-        })}
-        </Select>
-      </FormControl>
-    </Box>
-  );
-}
-
-
-function InputDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (test) => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        ToDo入力
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle id="ToDo-imput">
-          {"Imput ToDo"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="test">
-            日付とToDoを入力してください
-          </DialogContentText>
-          <Stack spacing={2}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker />
-            </LocalizationProvider>
-            <TimeSelect />
-            <TextField id="outlined-basic" label="ToDo" variant="outlined" />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export default function Home() {
   const [openLogout, setOpenLogout] = React.useState(false);
