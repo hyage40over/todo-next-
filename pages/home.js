@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { auth } from "../firebase/init"
+import { useRouter } from "next/router"
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
+import { useAuthContext } from "../src/context/AuthContext"
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,6 +11,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+
+import LogOffDialog from "../components/LogOffDialog"
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -45,44 +50,9 @@ import Logout from '@mui/icons-material/Logout';
 
 
 
-function LogOffDialog() {
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = (test) => {
-    setOpen(false);
-  };
-  return (
-    <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        ログアウト
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle id="ToDo-imput">
-          {"LOGOUT"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="test">
-            ログアウトしますか？
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>キャンセル</Button>
-          <Button onClick={handleClose} autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
 
 
-function AccountMenu() {
+function AccountMenu({onClickLogout}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -163,7 +133,7 @@ function AccountMenu() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={onClickLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -203,6 +173,8 @@ function BasicSelect() {
 }
 
 function InputWithIcon() {
+  const { user } = useAuthContext()
+  console.log("user---------", user);
   return (
     <Box sx={{ '& > :not(style)': { m: 1 } }}>
       <TextField
@@ -216,7 +188,7 @@ function InputWithIcon() {
             </InputAdornment>
           ),
         }}
-        defaultValue="アカウント-ユーザー名"
+        value={user?.email}
       />
     </Box>
   );
@@ -299,25 +271,33 @@ function InputDialog() {
 }
 
 export default function Home() {
+  const [openLogout, setOpenLogout] = React.useState(false);
+  const handleClickLogoutOpen = () => {
+    setOpenLogout(true);
+  };
+  const handleCloseLogout = (test) => {
+    setOpenLogout(false);
+  };
+
   return (
     <Container>
         <div align="right">
-          <InputWithIcon />        
-          <AccountMenu />
-          <LogOffDialog />
+          <InputWithIcon />
+          <AccountMenu onClickLogout={handleClickLogoutOpen} />
+          <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
           <InputDialog />
         </div>
         <Scheduler
-            locale={ja}
             //disableViewNavigator = {false}
             //navigationPickerProps = {"renderInput"}
+            locale={ja}
             week={{
               weekDays: [0, 1, 2, 3, 4, 5, 6],
               weekStartOn: 0,
               startHour: 9,
               endHour: 17,
               step: 60,
-              navigation: true,
+              // navigation: true,
               cellRenderer: ({ height, start, onClick, ...props }) => {
                 // Fake some condition up
                 const hour = start.getHours();

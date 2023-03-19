@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/init"
 import Alert from '@mui/material/Alert';
+import { useRouter } from "next/router"
+
 
 const theme = createTheme();
 
@@ -31,24 +33,32 @@ const ErrorMessageAlert = (props) => {
 
 export default function SignUp() {
     const [errorMessage, setErrorMessage] = useState("");
+    const router = useRouter();
+    const { user } = useAuthContext()
+
+    if (user) {
+      router.push('/home')
+    }
+
 
     const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get('email');
-    const password = data.get('password');
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const email = data.get('email');
+      const password = data.get('password');
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log("user detail -----", user);
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log("errorCode: ", errorCode);
-      console.log("errorMessage: ", errorMessage);
-      setErrorMessage(errorMessage);
-    }
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log("user detail -----", user);
+        router.push("/home")
+      } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("errorCode: ", errorCode);
+        console.log("errorMessage: ", errorMessage);
+        setErrorMessage(errorMessage);
+      }
   };
 
   return (
