@@ -14,6 +14,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import LogOffDialog from "../components/LogOffDialog"
 
+
+
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -48,11 +51,42 @@ import Logout from '@mui/icons-material/Logout';
 
 
 
+function SettingDialog({isOpen, onClickClose}) {
+  const router = useRouter()
+  const handleClickDeleteAccount = async () => {
+    await signOut(auth)
+    await router.push("/login")
+  };
+  return (
+    <div>
+      <Dialog
+        open={isOpen}
+        onClose={onClickClose}
+      >
+        <DialogTitle id="Setting">
+          {"LOGOUT"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="Setting-text">
+            アカウントを削除しますか？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClickClose}>キャンセル</Button>
+          <Button onClick={handleClickDeleteAccount} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
 
 
 
 
-function AccountMenu({onClickLogout}) {
+
+function AccountMenu({onClickLogout, onClickSetting}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -127,7 +161,7 @@ function AccountMenu({onClickLogout}) {
           </ListItemIcon>
           Add another account
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={onClickSetting}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
@@ -188,6 +222,7 @@ function InputWithIcon() {
             </InputAdornment>
           ),
         }}
+        //userがない場合は代入しない
         value={user?.email}
       />
     </Box>
@@ -270,21 +305,58 @@ function InputDialog() {
   );
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default function Home() {
   const [openLogout, setOpenLogout] = React.useState(false);
+  const [openSetting, setOpenSetting] = React.useState(false);
+
   const handleClickLogoutOpen = () => {
     setOpenLogout(true);
+    console.log("Logout")
+
+
   };
-  const handleCloseLogout = (test) => {
+  const handleCloseLogout = () => {
     setOpenLogout(false);
   };
+
+  const handleClickSettingOpen = () => {
+    setOpenSetting(true);
+    console.log("Setting")
+
+  };
+  const handleCloseSetting = () => {
+    setOpenSetting(false);
+  };
+
 
   return (
     <Container>
         <div align="right">
           <InputWithIcon />
-          <AccountMenu onClickLogout={handleClickLogoutOpen} />
+          <AccountMenu onClickLogout={handleClickLogoutOpen} onClickSetting={handleClickSettingOpen} />
           <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
+          <SettingDialog isOpen={openSetting} onClickClose={handleCloseSetting} />
           <InputDialog />
         </div>
         <Scheduler
