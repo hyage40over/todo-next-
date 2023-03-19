@@ -10,33 +10,32 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 export default function SettingDialog({isOpen, onClickClose}) {
-    const router = useRouter()
-    const handleClickDeleteAccount = async () => {
-      await signOut(auth)
-      await router.push("/login")
-    };
-    return (
-      <div>
-        <Dialog
-          open={isOpen}
-          onClose={onClickClose}
-        >
-          <DialogTitle id="Setting">
-            {"LOGOUT"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="Setting-text">
-              アカウントを削除しますか？
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onClickClose}>キャンセル</Button>
-            <Button onClick={handleClickDeleteAccount} autoFocus>
-              OK
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  }
-  
+  const router = useRouter()
+  const handleClickDeleteAccount = async () => {
+    await signOut(auth)
+    await router.push("/login")
+  };
+  return (
+    <div>
+      <Dialog
+        open={isOpen}
+        onClose={onClickClose}
+      >
+        <DialogTitle id="Setting">
+          {"LOGOUT"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="Setting-text">
+            アカウントを削除しますか？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClickClose}>キャンセル</Button>
+          <Button onClick={handleClickDeleteAccount} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}

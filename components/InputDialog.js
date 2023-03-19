@@ -21,102 +21,102 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
 function TimeSelect() {
-    const [time, setTime] = React.useState('');
-  
-    const handleChange = (event) => {
-      setTime(event.target.value);
-    };
-  
-    return (
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Time</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={time}
-            label="Time"
-            onChange={handleChange}
-          >
-          {[...Array(24)].map((_, i) => {
-            return (
-              <MenuItem value={i}>{i}</MenuItem>
-            );
-          })}
-          </Select>
-        </FormControl>
-      </Box>
-    );
-  }
-  
-  function BasicSelect() {
-    const [age, setAge] = React.useState('');
-  
-    const handleChange = (event) => {
-      setAge(event.target.value);
-    };
-  
-    return (
-      <Box sx={{ minWidth: 50 }}>
-        <FormControl>
-          <InputLabel id="demo-simple-select-label">選択</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={age}
-            label="Age"
-            onChange={handleChange}
-          >
-          <MenuItem value={10}>最優先</MenuItem>
-          <MenuItem value={20}>普通</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-    );
-  }
-  
-  export default function InputDialog() {
-    const [open, setOpen] = React.useState(false);
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = (test) => {
-      setOpen(false);
-    };
-  
-    return (
-      <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
-          ToDo入力
-        </Button>
-        <Dialog
-          open={open}
-          onClose={handleClose}
+  const [time, setTime] = React.useState('');
+
+  const handleChange = (event) => {
+    setTime(event.target.value);
+  };
+
+  return (
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Time</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={time}
+          label="Time"
+          onChange={handleChange}
         >
-          <DialogTitle id="ToDo-imput">
-            {"Imput ToDo"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="test">
-              日付とToDoを入力してください
-            </DialogContentText>
-            <Stack spacing={2}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker />
-              </LocalizationProvider>
-              <TimeSelect />
-              <TextField id="outlined-basic" label="ToDo" variant="outlined" />
-            </Stack>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
-            <Button onClick={handleClose} autoFocus>
-              Agree
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  }
+        {[...Array(24)].map((_, i) => {
+          return (
+            <MenuItem value={i}>{i}</MenuItem>
+          );
+        })}
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
+  
+function BasicSelect() {
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  return (
+    <Box sx={{ minWidth: 50 }}>
+      <FormControl>
+        <InputLabel id="demo-simple-select-label">選択</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+        <MenuItem value={10}>最優先</MenuItem>
+        <MenuItem value={20}>普通</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
+  
+export default function InputDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (test) => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        ToDo入力
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle id="ToDo-imput">
+          {"Imput ToDo"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="test">
+            日付とToDoを入力してください
+          </DialogContentText>
+          <Stack spacing={2}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker />
+            </LocalizationProvider>
+            <TimeSelect />
+            <TextField id="outlined-basic" label="ToDo" variant="outlined" />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
