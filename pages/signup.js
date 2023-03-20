@@ -17,6 +17,8 @@ import { auth } from "../firebase/init"
 import Alert from '@mui/material/Alert';
 import { useRouter } from "next/router"
 
+import { useAuthContext } from "../src/context/AuthContext"
+
 
 const theme = createTheme();
 
