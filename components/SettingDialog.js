@@ -47,7 +47,7 @@ export default function SettingDialog({isOpen, onClickClose}) {
           {user?.email}のアカウント設定
           </DialogContentText>
           <Stack spacing={2}>
-            <TextField id="email" label="e-mail" variant="outlined" />
+            <TextField id="email" label="e-mail" variant="outlined" value={user?.email} />
             <TextField id="password" label="パスワード" variant="outlined" />
           </Stack>
         </DialogContent>
