@@ -8,30 +8,22 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import TextField from '@mui/material/TextField';
-import { useAuthContext } from "../src/context/AuthContext"
 import Stack from '@mui/material/Stack';
 
+import { useRouter } from "next/router"
 import { deleteUser } from "firebase/auth";
 import { auth } from "../firebase/init"
 
-
 export default function SettingDialog({isOpen, onClickClose}) {
-  //const { user } = useAuthContext()
-
-  //const auth = getAuth();
+  const router = useRouter()
   const user = auth.currentUser;
-
-
   const handleClickUpdateAccount = async () => {
-    //await signOut(auth)
-    //await router.push("/signup")
 
   };
-
   const handleDeleteUser = async () => {
     deleteUser(user).then(() => {
       // User deleted.
-      signOut(auth)
+      //signOut(auth)
       router.push("/signup")
   
     }).catch((error) => {
@@ -41,14 +33,12 @@ export default function SettingDialog({isOpen, onClickClose}) {
       // ...
     });
   };
-
-
   return (
     <div>
       <Dialog
         open={isOpen}
         onClose={onClickClose}
-      >
+        >
         <DialogTitle id="Setting">
           {"Account Setting"}
         </DialogTitle>
@@ -57,8 +47,8 @@ export default function SettingDialog({isOpen, onClickClose}) {
           {user?.email}のアカウント設定
           </DialogContentText>
           <Stack spacing={2}>
-            <TextField id="outlined-basic" label="e-mail" variant="outlined" />
-            <TextField id="outlined-basic" label="パスワード" variant="outlined" />
+            <TextField id="email" label="e-mail" variant="outlined" />
+            <TextField id="password" label="パスワード" variant="outlined" />
           </Stack>
         </DialogContent>
         <DialogActions>
