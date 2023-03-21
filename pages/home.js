@@ -168,7 +168,6 @@ export default function Home() {
     setOpenSetting(false);
   };
 
-
   return (
     <Container>
         <div align="right">

@@ -39,7 +39,7 @@ function TimeSelect() {
         >
         {[...Array(24)].map((_, i) => {
           return (
-            <MenuItem value={i}>{i}</MenuItem>
+            <MenuItem key={i.toString()} value={i}>{i}</MenuItem>
           );
         })}
         </Select>
