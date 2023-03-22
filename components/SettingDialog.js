@@ -13,6 +13,8 @@ import Stack from '@mui/material/Stack';
 import { useRouter } from "next/router"
 import { deleteUser } from "firebase/auth";
 import { auth } from "../firebase/init"
+import { signOut } from "firebase/auth"
+
 
 export default function SettingDialog({isOpen, onClickClose}) {
   const router = useRouter()
@@ -21,10 +23,10 @@ export default function SettingDialog({isOpen, onClickClose}) {
 
   };
   const handleDeleteUser = async () => {
+    await signOut(auth)
+    await router.push("/signup")
     deleteUser(user).then(() => {
       // User deleted.
-      //signOut(auth)
-      router.push("/signup")
   
     }).catch((error) => {
 
