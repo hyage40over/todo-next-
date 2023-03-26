@@ -22,7 +22,7 @@
     "@mui/x-date-pickers": "^6.0.1",
     "@next/font": "latest",
     "dayjs": "^1.11.7",
-    "firebase": "^9.17.1",
+    "firebase": "^9.17.2",
     "next": "latest",
     "prop-types": "latest",
     "react": "latest",

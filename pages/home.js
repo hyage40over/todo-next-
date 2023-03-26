@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 
 import TextField from '@mui/material/TextField';
-import { Scheduler } from "@aldabil/react-scheduler";
+import { Scheduler, useScheduler } from "@aldabil/react-scheduler";
 
 import ja from 'date-fns/locale/ja'
 
@@ -29,6 +29,11 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "../firebase/init"
+
+
 
 function AccountMenu({onClickLogout, onClickSetting}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -148,6 +153,34 @@ function InputWithIcon() {
 export default function Home() {
   const [openLogout, setOpenLogout] = React.useState(false);
   const [openSetting, setOpenSetting] = React.useState(false);
+  const scheduler = useScheduler();
+  const setEvents = scheduler.setEvents;
+
+  const initSchedule = async () => {
+    // fireStoreからDBを取得
+    const snapshot = await getDocs(collection(db, "schedules"));
+
+    const firestoreResponse = [];
+    snapshot.forEach((doc) => {
+      firestoreResponse.push({
+        event_id: doc.id,
+          title: doc.data().title,
+          start: doc.data().start.toDate(),
+          end: doc.data().end.toDate(),
+      })
+    });
+
+
+
+
+    setEvents(firestoreResponse);
+  }
+
+  React.useEffect(() => {
+    initSchedule();
+  }, [])
+
+
 
   const handleClickLogoutOpen = () => {
     setOpenLogout(true);
@@ -168,6 +201,63 @@ export default function Home() {
     setOpenSetting(false);
   };
 
+
+  const handleConfirm = async (
+    event,
+    action
+  ) => {
+    //console.log("handleConfirm =", action, event.title, event.start, event.end);
+    console.log("event.start =", event.start);
+    console.log("event.end =", event.end);
+
+    /**
+     * Make sure to return 4 mandatory fields:
+     * event_id: string|number
+     * title: string
+     * start: Date|string
+     * end: Date|string
+     * ....extra other fields depend on your custom fields/editor properties
+     */
+    // Simulate http request: return added/edited event
+    return new Promise((res, rej) => {
+      if (action === "edit") {
+        /** PUT event to remote DB */
+      } else if (action === "create") {
+        /**POST event to remote DB */
+        console.log("create")
+
+        try {
+          const docRef = addDoc(collection(db, "schedules"), {
+            start: event.start,
+            end: event.end,
+            title: event.title
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+
+
+      }
+
+      const isFail = Math.random() > 0.6;
+      // Make it slow just for testing
+      setTimeout(() => {
+        if (isFail) {
+          rej("Ops... Faild");
+        } else {
+          res({
+            ...event,
+            event_id: event.event_id || Math.random()
+          });
+        }
+      }, 1000);
+    });
+  };
+
+
+
+
   return (
     <Container>
         <div align="right">
@@ -181,6 +271,7 @@ export default function Home() {
             //disableViewNavigator = {false}
             //navigationPickerProps = {"renderInput"}
             locale={ja}
+            onConfirm={handleConfirm}
             week={{
               weekDays: [0, 1, 2, 3, 4, 5, 6],
               weekStartOn: 0,
@@ -213,20 +304,7 @@ export default function Home() {
                 );
               }
             }}
-            events={[
-              {
-                event_id: 1,
-                title: "Event 1",
-                start: new Date("2023/3/14 09:30"),
-                end: new Date("2023/3/14 10:30"),
-              },
-              {
-                event_id: 2,
-                title: "Event 2",
-                start: new Date("2023/3/14 10:00"),
-                end: new Date("2023/3/14 11:00"),
-              },
-            ]}
+            // events={events}
           />
     </Container>
   );

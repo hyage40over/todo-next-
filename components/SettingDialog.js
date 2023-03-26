@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -11,30 +11,60 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 
 import { useRouter } from "next/router"
-import { deleteUser } from "firebase/auth";
+import { deleteUser, EmailAuthProvider, reauthenticateWithCredential, currentUser } from "firebase/auth";
 import { auth } from "../firebase/init"
-import { signOut } from "firebase/auth"
-
+import { signOut, updateEmail } from "firebase/auth"
 
 export default function SettingDialog({isOpen, onClickClose}) {
   const router = useRouter()
   const user = auth.currentUser;
-  const handleClickUpdateAccount = async () => {
 
-  };
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(user?.email);
+
+  console.log("user----------", user);
+  console.log("password----------", password);
+
   const handleDeleteUser = async () => {
-    await signOut(auth)
-    await router.push("/signup")
+    //const userr = await currentUser
+    const credential = await EmailAuthProvider.credential(
+      user.email, // ←ここに入力されたメールアドレス
+      password // ←ここに入力されたパスワード
+    )
+    await reauthenticateWithCredential(user, credential)
     deleteUser(user).then(() => {
-      // User deleted.
-  
+      signOut(auth)
+      router.push("/signup")      
     }).catch((error) => {
-
       console.log(error)
-      // An error ocurred
-      // ...
     });
   };
+
+
+  const handleClickUpdateAccount = async () => {
+    const credential = await EmailAuthProvider.credential(
+      user.email, // ←ここに入力されたメールアドレス
+      password // ←ここに入力されたパスワード
+    )
+
+    await reauthenticateWithCredential(user, credential)
+    //await updatePassword(user, newPassword)
+    try {
+      await updateEmail(user, email)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value)
+  }
+
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value)
+  }
+
   return (
     <div>
       <Dialog
@@ -49,8 +79,8 @@ export default function SettingDialog({isOpen, onClickClose}) {
           {user?.email}のアカウント設定
           </DialogContentText>
           <Stack spacing={2}>
-            <TextField id="email" label="e-mail" variant="outlined" defaultValue={user?.email} />
-            <TextField id="password" label="パスワード" variant="outlined" />
+            <TextField id="email" label="e-mail" variant="outlined" value={email} onChange={handleEmailChange}/>
+            <TextField id="password" label="パスワード" variant="outlined" type="password" value={password} onChange={handlePasswordChange} />
           </Stack>
         </DialogContent>
         <DialogActions>
