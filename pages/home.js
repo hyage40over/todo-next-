@@ -320,7 +320,7 @@ export default function Home() {
 
     return new Promise((res, rej) => {
       setTimeout(() => {
-        res(deletedId);
+        res(id);
       }, 3000);
     });
  }      
