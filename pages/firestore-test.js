@@ -15,9 +15,7 @@ export default function FirestoreTest() {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-
   }
-
   return (
     <>
       <Button variant="text" onClick={handleClickAddData}>データ登録</Button>
