@@ -30,10 +30,8 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/init"
-
-
 
 function AccountMenu({onClickLogout, onClickSetting}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -159,7 +157,6 @@ export default function Home() {
   const initSchedule = async () => {
     // fireStoreからDBを取得
     const snapshot = await getDocs(collection(db, "schedules"));
-
     const firestoreResponse = [];
     snapshot.forEach((doc) => {
       firestoreResponse.push({
@@ -169,44 +166,31 @@ export default function Home() {
           end: doc.data().end.toDate(),
       })
     });
-
-
-
-
     setEvents(firestoreResponse);
   }
-
   React.useEffect(() => {
     initSchedule();
   }, [])
-
-
-
   const handleClickLogoutOpen = () => {
     setOpenLogout(true);
     console.log("Logout")
-
-
   };
   const handleCloseLogout = () => {
     setOpenLogout(false);
   };
-
   const handleClickSettingOpen = () => {
     setOpenSetting(true);
     console.log("Setting")
-
   };
   const handleCloseSetting = () => {
     setOpenSetting(false);
   };
-
-
   const handleConfirm = async (
     event,
     action
   ) => {
     //console.log("handleConfirm =", action, event.title, event.start, event.end);
+    console.log("event.event_id =", event.event_id);
     console.log("event.start =", event.start);
     console.log("event.end =", event.end);
 
@@ -220,12 +204,25 @@ export default function Home() {
      */
     // Simulate http request: return added/edited event
     return new Promise((res, rej) => {
+      /** PUT event to remote DB */
       if (action === "edit") {
-        /** PUT event to remote DB */
-      } else if (action === "create") {
-        /**POST event to remote DB */
-        console.log("create")
+        console.log("edit")
+        const docRef = doc(db, "schedules", event.event_id);
+        try {
+          updateDoc(docRef, {
+            start: event.start,
+            end: event.end,
+            title: event.title
+          });
+          console.log("Document edited with ID:: ", docRef.id);
+        } catch (e) {
+          console.error("Error editting document: ", e);
+        }
 
+
+      /**POST event to remote DB */
+      } else if (action === "create") {
+        console.log("create")
         try {
           const docRef = addDoc(collection(db, "schedules"), {
             start: event.start,
@@ -236,8 +233,6 @@ export default function Home() {
         } catch (e) {
           console.error("Error adding document: ", e);
         }
-
-
       }
 
       const isFail = Math.random() > 0.6;
@@ -252,11 +247,78 @@ export default function Home() {
           });
         }
       }, 1000);
+
+
     });
   };
 
+  const handleEventDrop = async (
+    droppedOn, 
+    updatedEvent, 
+    originalEvent
+  ) => {
+    //console.log("droppedOn =", droppedOn);
+    console.log("updatedEvent.start =", updatedEvent.start);
+    console.log("updatedEvent.end =", updatedEvent.end);
+    //console.log("originalEvent =", originalEvent);
 
 
+    return new Promise((res, rej) => {
+
+
+      const docRef = doc(db, "schedules", updatedEvent.event_id);
+
+      try {
+        updateDoc(docRef, {
+          start: updatedEvent.start,
+          end: rej.end,
+          title: updatedEvent.title
+        });
+        console.log("Document updated with ID: ", docRef.id)
+      } catch (e) {
+        console.error("Error updating document: ", e);
+      }
+
+      const isFail = Math.random() > 0.6;
+      // Make it slow just for testing
+      setTimeout(() => {
+        if (isFail) {
+          rej("Ops... Faild");
+        } else {
+          res({
+            ...updatedEvent,
+            event_id: updatedEvent.event_id || Math.random()
+          });
+        }
+      }, 1000);
+
+    })
+  }  
+
+  const handleDelete = async (
+    id
+  ) => {
+    await deleteDoc(doc(db, "schedules", id));
+    console.log("id =", id);
+
+    return new Promise((res, rej) => {
+
+      const isFail = Math.random() > 0.6;
+      // Make it slow just for testing
+      setTimeout(() => {
+        if (isFail) {
+          rej("Ops... Faild");
+        } else {
+          res({
+            ...id,
+            event_id: id || Math.random()
+          });
+        }
+      }, 1000);
+
+    })  
+
+ }      
 
   return (
     <Container>
@@ -272,6 +334,8 @@ export default function Home() {
             //navigationPickerProps = {"renderInput"}
             locale={ja}
             onConfirm={handleConfirm}
+            onEventDrop={handleEventDrop}
+            onDelete={handleDelete}
             week={{
               weekDays: [0, 1, 2, 3, 4, 5, 6],
               weekStartOn: 0,
