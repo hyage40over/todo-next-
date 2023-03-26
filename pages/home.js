@@ -31,7 +31,9 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
 import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../firebase/init"
+import { db } from "../firebase/init";
+
+//import { EVENTS } from "./events";
 
 function AccountMenu({onClickLogout, onClickSetting}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -186,6 +188,20 @@ export default function Home() {
     setOpenSetting(false);
   };
 
+
+  /**
+  const fetchRemote = async (query) => {
+    console.log({ query });
+    return new Promise((res) => {
+      setTimeout(() => {
+        res(EVENTS);
+      }, 3000);
+    });
+  };
+  **/
+
+
+
   const handleConfirm = async (
     event,
     action
@@ -266,7 +282,6 @@ export default function Home() {
 
     return new Promise((res, rej) => {
 
-
       const docRef = doc(db, "schedules", updatedEvent.event_id);
 
       try {
@@ -296,6 +311,7 @@ export default function Home() {
     })
   }  
 
+
   const handleDelete = async (
     id
   ) => {
@@ -303,22 +319,10 @@ export default function Home() {
     console.log("id =", id);
 
     return new Promise((res, rej) => {
-
-      const isFail = Math.random() > 0.6;
-      // Make it slow just for testing
       setTimeout(() => {
-        if (isFail) {
-          rej("Ops... Faild");
-        } else {
-          res({
-            ...id,
-            event_id: id || Math.random()
-          });
-        }
-      }, 1000);
-
-    })  
-
+        res(deletedId);
+      }, 3000);
+    });
  }      
 
   return (
@@ -334,6 +338,9 @@ export default function Home() {
             //disableViewNavigator = {false}
             //navigationPickerProps = {"renderInput"}
             locale={ja}
+
+            //getRemoteEvents={fetchRemote}
+
             onConfirm={handleConfirm}
             onEventDrop={handleEventDrop}
             onDelete={handleDelete}
