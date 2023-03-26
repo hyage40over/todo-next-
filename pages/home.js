@@ -211,6 +211,9 @@ export default function Home() {
     console.log("event.start =", event.start);
     console.log("event.end =", event.end);
 
+    var isFail = true
+
+
     /**
      * Make sure to return 4 mandatory fields:
      * event_id: string|number
@@ -231,6 +234,7 @@ export default function Home() {
             end: event.end,
             title: event.title
           });
+          isFail = false
           console.log("Document edited with ID:: ", docRef.id);
         } catch (e) {
           console.error("Error editting document: ", e);
@@ -246,13 +250,14 @@ export default function Home() {
             end: event.end,
             title: event.title
           });
+          isFail = false
           console.log("Document written with ID: ", docRef.id);
         } catch (e) {
           console.error("Error adding document: ", e);
         }
       }
 
-      const isFail = Math.random() > 0.6;
+      // const isFail = Math.random() > 0.6;
       // Make it slow just for testing
       setTimeout(() => {
         if (isFail) {
@@ -317,7 +322,7 @@ export default function Home() {
     await deleteDoc(doc(db, "schedules", id));
     console.log("id =", id);
 
-    return new Promise((res, rej) => {
+    return new Promise((res) => {
       setTimeout(() => {
         res(id);
       }, 3000);
