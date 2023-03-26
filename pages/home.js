@@ -223,7 +223,7 @@ export default function Home() {
      * ....extra other fields depend on your custom fields/editor properties
      */
     // Simulate http request: return added/edited event
-    return new Promise((res, rej) => {
+    return new Promise((resolv, reject) => {
       if (action === "edit") {
         /** PUT event to remote DB */
         console.log("edit")
@@ -261,9 +261,9 @@ export default function Home() {
       // Make it slow just for testing
       setTimeout(() => {
         if (isFail) {
-          rej("Ops... Faild");
+          reject("Ops... Faild");
         } else {
-          res({
+          resolv({
             ...event,
             event_id: event.event_id || Math.random()
           });
@@ -286,7 +286,7 @@ export default function Home() {
     //console.log("originalEvent =", originalEvent);
 
     var isFail = true
-    return new Promise((res, rej) => {
+    return new Promise((resolv, reject) => {
 
       try {
         updateDoc(docRef, {
@@ -304,9 +304,9 @@ export default function Home() {
       // Make it slow just for testing
       setTimeout(() => {
         if (isFail) {
-          rej("Ops... Faild");
+          reject("Ops... Faild");
         } else {
-          res({
+          resolv({
             ...updatedEvent,
             event_id: updatedEvent.event_id || Math.random()
           });
