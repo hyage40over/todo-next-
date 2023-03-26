@@ -185,6 +185,7 @@ export default function Home() {
   const handleCloseSetting = () => {
     setOpenSetting(false);
   };
+
   const handleConfirm = async (
     event,
     action
@@ -204,8 +205,8 @@ export default function Home() {
      */
     // Simulate http request: return added/edited event
     return new Promise((res, rej) => {
-      /** PUT event to remote DB */
       if (action === "edit") {
+        /** PUT event to remote DB */
         console.log("edit")
         const docRef = doc(db, "schedules", event.event_id);
         try {
@@ -220,8 +221,8 @@ export default function Home() {
         }
 
 
-      /**POST event to remote DB */
       } else if (action === "create") {
+        /**POST event to remote DB */
         console.log("create")
         try {
           const docRef = addDoc(collection(db, "schedules"), {
@@ -246,7 +247,7 @@ export default function Home() {
             event_id: event.event_id || Math.random()
           });
         }
-      }, 1000);
+      }, 3000);
 
 
     });
@@ -271,7 +272,7 @@ export default function Home() {
       try {
         updateDoc(docRef, {
           start: updatedEvent.start,
-          end: rej.end,
+          end: updatedEvent.end,
           title: updatedEvent.title
         });
         console.log("Document updated with ID: ", docRef.id)
@@ -290,7 +291,7 @@ export default function Home() {
             event_id: updatedEvent.event_id || Math.random()
           });
         }
-      }, 1000);
+      }, 3000);
 
     })
   }  
