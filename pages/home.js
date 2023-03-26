@@ -264,8 +264,6 @@ export default function Home() {
           });
         }
       }, 3000);
-
-
     });
   };
 
@@ -274,28 +272,30 @@ export default function Home() {
     updatedEvent, 
     originalEvent
   ) => {
+
+    const docRef = await doc(db, "schedules", originalEvent.event_id);
+
     //console.log("droppedOn =", droppedOn);
     console.log("updatedEvent.start =", updatedEvent.start);
     console.log("updatedEvent.end =", updatedEvent.end);
     //console.log("originalEvent =", originalEvent);
 
-
+    var isFail = true
     return new Promise((res, rej) => {
-
-      const docRef = doc(db, "schedules", updatedEvent.event_id);
 
       try {
         updateDoc(docRef, {
           start: updatedEvent.start,
           end: updatedEvent.end,
-          title: updatedEvent.title
+          title: originalEvent.title
         });
+        isFail = false
         console.log("Document updated with ID: ", docRef.id)
       } catch (e) {
         console.error("Error updating document: ", e);
       }
 
-      const isFail = Math.random() > 0.6;
+      //const isFail = Math.random() > 0.6;
       // Make it slow just for testing
       setTimeout(() => {
         if (isFail) {
@@ -307,11 +307,10 @@ export default function Home() {
           });
         }
       }, 3000);
-
     })
   }  
 
-
+  // event delete
   const handleDelete = async (
     id
   ) => {
