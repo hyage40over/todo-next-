@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 
 import LogOffDialog from "../components/LogOffDialog"
 import SettingDialog from "../components/SettingDialog"
-import InputDialog from "../components/InputDialog"
+//import InputDialog from "../components/InputDialog"
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -332,7 +332,7 @@ export default function Home() {
           <AccountMenu onClickLogout={handleClickLogoutOpen} onClickSetting={handleClickSettingOpen} />
           <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
           <SettingDialog isOpen={openSetting} onClickClose={handleCloseSetting} />
-          <InputDialog />
+          {/*<InputDialog />*/}
         </div>
         <Scheduler
             //disableViewNavigator = {false}
