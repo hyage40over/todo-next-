@@ -32,6 +32,7 @@ import Logout from '@mui/icons-material/Logout';
 
 import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/init";
+import { bool } from 'prop-types';
 
 //import { EVENTS } from "./events";
 
@@ -188,20 +189,7 @@ export default function Home() {
     setOpenSetting(false);
   };
 
-
-  /**
-  const fetchRemote = async (query) => {
-    console.log({ query });
-    return new Promise((res) => {
-      setTimeout(() => {
-        res(EVENTS);
-      }, 3000);
-    });
-  };
-  **/
-
-
-
+  // handle Confirm
   const handleConfirm = async (
     event,
     action
@@ -212,6 +200,36 @@ export default function Home() {
     console.log("event.end =", event.end);
 
     var isFail = true
+    if (action === "edit") {
+      /** PUT event to remote DB */
+      const docRef = await doc(db, "schedules", event.event_id);
+      console.log("edit")
+      try {
+        await updateDoc(docRef, {
+          start: event.start,
+          end: event.end,
+          title: event.title
+        });
+        isFail = false
+        console.log("Document edited with ID:: ", docRef.id);
+      } catch (e) {
+        console.error("Error editting document: ", e);
+      }
+    } else if (action === "create") {
+      /**POST event to remote DB */
+      console.log("create")
+      try {
+        const docRef = await addDoc(collection(db, "schedules"), {
+          start: event.start,
+          end: event.end,
+          title: event.title
+        });
+        isFail = false
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
 
 
     /**
@@ -224,41 +242,8 @@ export default function Home() {
      */
     // Simulate http request: return added/edited event
     return new Promise((resolv, reject) => {
-      if (action === "edit") {
-        /** PUT event to remote DB */
-        console.log("edit")
-        const docRef = doc(db, "schedules", event.event_id);
-        try {
-          updateDoc(docRef, {
-            start: event.start,
-            end: event.end,
-            title: event.title
-          });
-          isFail = false
-          console.log("Document edited with ID:: ", docRef.id);
-        } catch (e) {
-          console.error("Error editting document: ", e);
-        }
 
-
-      } else if (action === "create") {
-        /**POST event to remote DB */
-        console.log("create")
-        try {
-          const docRef = addDoc(collection(db, "schedules"), {
-            start: event.start,
-            end: event.end,
-            title: event.title
-          });
-          isFail = false
-          console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-          console.error("Error adding document: ", e);
-        }
-      }
-
-      // const isFail = Math.random() > 0.6;
-      // Make it slow just for testing
+      // Make it slow 
       setTimeout(() => {
         if (isFail) {
           reject("Ops... Faild");
@@ -272,36 +257,36 @@ export default function Home() {
     });
   };
 
+  // handle EventDrop
   const handleEventDrop = async (
     droppedOn, 
     updatedEvent, 
     originalEvent
   ) => {
 
+    var isFail = await true
     const docRef = await doc(db, "schedules", originalEvent.event_id);
+
+    try {
+      await updateDoc(docRef, {
+        start: updatedEvent.start,
+        end: updatedEvent.end,
+        title: originalEvent.title
+      });
+      isFail = false
+      console.log("Document updated with ID: ", docRef.id)
+    } catch (e) {
+      console.error("Error updating document: ", e);
+    }
 
     //console.log("droppedOn =", droppedOn);
     console.log("updatedEvent.start =", updatedEvent.start);
     console.log("updatedEvent.end =", updatedEvent.end);
     //console.log("originalEvent =", originalEvent);
 
-    var isFail = true
     return new Promise((resolv, reject) => {
 
-      try {
-        updateDoc(docRef, {
-          start: updatedEvent.start,
-          end: updatedEvent.end,
-          title: originalEvent.title
-        });
-        isFail = false
-        console.log("Document updated with ID: ", docRef.id)
-      } catch (e) {
-        console.error("Error updating document: ", e);
-      }
-
-      //const isFail = Math.random() > 0.6;
-      // Make it slow just for testing
+      // Make it slow
       setTimeout(() => {
         if (isFail) {
           reject("Ops... Faild");
@@ -315,7 +300,7 @@ export default function Home() {
     })
   }  
 
-  // event delete
+  // handle delete
   const handleDelete = async (
     id
   ) => {
@@ -327,7 +312,7 @@ export default function Home() {
         res(id);
       }, 3000);
     });
- }      
+  }      
 
   return (
     <Container>
@@ -342,9 +327,6 @@ export default function Home() {
             //disableViewNavigator = {false}
             //navigationPickerProps = {"renderInput"}
             locale={ja}
-
-            //getRemoteEvents={fetchRemote}
-
             onConfirm={handleConfirm}
             onEventDrop={handleEventDrop}
             onDelete={handleDelete}
