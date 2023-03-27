@@ -199,7 +199,7 @@ export default function Home() {
     console.log("event.start =", event.start);
     console.log("event.end =", event.end);
 
-    var isFail = true
+    var isFail = await true
     if (action === "edit") {
       /** PUT event to remote DB */
       const docRef = await doc(db, "schedules", event.event_id);
@@ -265,13 +265,13 @@ export default function Home() {
   ) => {
 
     var isFail = await true
-    const docRef = await doc(db, "schedules", originalEvent.event_id);
+    const docRef = await doc(db, "schedules", updatedEvent.event_id);
 
     try {
       await updateDoc(docRef, {
         start: updatedEvent.start,
         end: updatedEvent.end,
-        title: originalEvent.title
+        title: updatedEvent.title
       });
       isFail = false
       console.log("Document updated with ID: ", docRef.id)
