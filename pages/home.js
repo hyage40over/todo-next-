@@ -197,20 +197,15 @@ export default function Home() {
     event,
     action
   ) => {
-    //console.log("handleConfirm =", action, event.title, event.start, event.end);
-    console.log("event.event_id =", event.event_id);
-    console.log("event.start =", event.start);
-    console.log("event.end =", event.end);
 
     var isFail = await true
     if (action === "edit") {
       /** PUT event to remote DB */
       const docRef = await doc(db, "schedules", String(event.event_id));
 
-      console.log("event_id = ", String(event.event_id))
+      //console.log("event_id = ", String(event.event_id))
 
 
-      console.log("edit")
       try {
         await updateDoc(docRef, {
           start: event.start,
@@ -222,9 +217,13 @@ export default function Home() {
       } catch (e) {
         console.error("Error editting document: ", e);
       }
+
+      console.log("edit")
+
+
+
     } else if (action === "create") {
       /**POST event to remote DB */
-      console.log("create")
       try {
         const docRef = await addDoc(collection(db, "schedules"), {
           start: event.start,
@@ -236,7 +235,15 @@ export default function Home() {
       } catch (e) {
         console.error("Error adding document: ", e);
       }
+
+      console.log("create")
+
     }
+
+    console.log("event.event_id =", event.event_id);
+    console.log("event.start =", event.start);
+    console.log("event.end =", event.end);
+
 
 
     /**
@@ -272,17 +279,24 @@ export default function Home() {
   ) => {
 
     var isFail = await true
-    const docRef = await doc(db, "schedules", String(updatedEvent.event_id));
+    //const docRef = await db.collection('schedules').doc('updatedEvent.event_id')
+    const docRef = await doc(db, "schedules", String(originalEvent.event_id));
     //const docRef = await query(collection(db, "schedules"), where("event_id", "==", String(updatedEvent.event_id)));
 
-    console.log("event_id = ", String(updatedEvent.event_id))
 
 
     try {
+      /*
+      await docRef.update({
+        start: updatedEvent.start,
+        end: updatedEvent.end,
+        title: originalEvent.title
+      })
+      */
       await updateDoc(docRef, {
         start: updatedEvent.start,
         end: updatedEvent.end,
-        title: updatedEvent.title
+        title: originalEvent.title
       });
       isFail = false
       console.log("Document updated with ID: ", docRef.id)
@@ -294,6 +308,9 @@ export default function Home() {
     console.log("updatedEvent.start =", updatedEvent.start);
     console.log("updatedEvent.end =", updatedEvent.end);
     //console.log("originalEvent =", originalEvent);
+
+    console.log("event_id = ", String(updatedEvent.event_id))
+
 
     return new Promise((resolv, reject) => {
 
