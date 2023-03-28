@@ -34,6 +34,9 @@ import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase
 import { db } from "../firebase/init";
 import { bool } from 'prop-types';
 
+import { query, where } from "firebase/firestore";
+
+
 //import { EVENTS } from "./events";
 
 function AccountMenu({onClickLogout, onClickSetting}) {
@@ -62,7 +65,7 @@ function AccountMenu({onClickLogout, onClickSetting}) {
             <Avatar sx={{ width: 100, height: 64 }}>Account Menu</Avatar>
           </IconButton>
         </Tooltip>
-      </Box>
+        </Box>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -202,7 +205,11 @@ export default function Home() {
     var isFail = await true
     if (action === "edit") {
       /** PUT event to remote DB */
-      const docRef = await doc(db, "schedules", event.event_id);
+      const docRef = await doc(db, "schedules", String(event.event_id));
+
+      console.log("event_id = ", String(event.event_id))
+
+
       console.log("edit")
       try {
         await updateDoc(docRef, {
@@ -265,7 +272,11 @@ export default function Home() {
   ) => {
 
     var isFail = await true
-    const docRef = await doc(db, "schedules", updatedEvent.event_id);
+    const docRef = await doc(db, "schedules", String(updatedEvent.event_id));
+    //const docRef = await query(collection(db, "schedules"), where("event_id", "==", String(updatedEvent.event_id)));
+
+    console.log("event_id = ", String(updatedEvent.event_id))
+
 
     try {
       await updateDoc(docRef, {
@@ -304,7 +315,7 @@ export default function Home() {
   const handleDelete = async (
     id
   ) => {
-    await deleteDoc(doc(db, "schedules", id));
+    await deleteDoc(doc(db, "schedules", String(id)));
     console.log("id =", id);
 
     return new Promise((res) => {
