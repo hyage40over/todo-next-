@@ -198,12 +198,17 @@ export default function Home() {
     action
   ) => {
 
+    console.log("event.event_id =", event.event_id);
+    console.log("event.start =", event.start);
+    console.log("event.end =", event.end);
+
     var isFail = await true
     if (action === "edit") {
       /** PUT event to remote DB */
       const docRef = await doc(db, "schedules", String(event.event_id));
 
       //console.log("event_id = ", String(event.event_id))
+      console.log("edit")
 
 
       try {
@@ -218,11 +223,13 @@ export default function Home() {
         console.error("Error editting document: ", e);
       }
 
-      console.log("edit")
 
 
 
     } else if (action === "create") {
+
+      console.log("create")
+
       /**POST event to remote DB */
       try {
         const docRef = await addDoc(collection(db, "schedules"), {
@@ -235,15 +242,7 @@ export default function Home() {
       } catch (e) {
         console.error("Error adding document: ", e);
       }
-
-      console.log("create")
-
     }
-
-    console.log("event.event_id =", event.event_id);
-    console.log("event.start =", event.start);
-    console.log("event.end =", event.end);
-
 
 
     /**
@@ -278,12 +277,16 @@ export default function Home() {
     originalEvent
   ) => {
 
+    //console.log("droppedOn =", droppedOn);
+    console.log("updatedEvent.start =", updatedEvent.start);
+    console.log("updatedEvent.end =", updatedEvent.end);
+    //console.log("originalEvent =", originalEvent);
+    console.log("event_id = ", updatedEvent.event_id)
+
     var isFail = await true
     //const docRef = await db.collection('schedules').doc('updatedEvent.event_id')
     const docRef = await doc(db, "schedules", String(originalEvent.event_id));
     //const docRef = await query(collection(db, "schedules"), where("event_id", "==", String(updatedEvent.event_id)));
-
-
 
     try {
       /*
@@ -303,14 +306,6 @@ export default function Home() {
     } catch (e) {
       console.error("Error updating document: ", e);
     }
-
-    //console.log("droppedOn =", droppedOn);
-    console.log("updatedEvent.start =", updatedEvent.start);
-    console.log("updatedEvent.end =", updatedEvent.end);
-    //console.log("originalEvent =", originalEvent);
-
-    console.log("event_id = ", String(updatedEvent.event_id))
-
 
     return new Promise((resolv, reject) => {
 
