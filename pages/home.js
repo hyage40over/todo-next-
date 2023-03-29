@@ -202,6 +202,7 @@ export default function Home() {
     console.log("event.start =", event.start);
     console.log("event.end =", event.end);
 
+    var tmp_id = await 0
     var isFail = await true
     if (action === "edit") {
       /** PUT event to remote DB */
@@ -219,6 +220,7 @@ export default function Home() {
         });
         isFail = false
         console.log("Document edited with ID:: ", docRef.id);
+        tmp_id = docRef.id
       } catch (e) {
         console.error("Error editting document: ", e);
       }
@@ -239,6 +241,8 @@ export default function Home() {
         });
         isFail = false
         console.log("Document written with ID: ", docRef.id);
+        tmp_id = docRef.id
+
       } catch (e) {
         console.error("Error adding document: ", e);
       }
@@ -261,9 +265,15 @@ export default function Home() {
         if (isFail) {
           reject("Ops... Faild");
         } else {
+          /*
           resolv({
             ...event,
             event_id: event.event_id || Math.random()
+          });
+          */          
+          resolv({
+            ...event,
+            event_id: tmp_id || Math.random()
           });
         }
       }, 3000);
