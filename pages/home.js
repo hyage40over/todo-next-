@@ -36,9 +36,6 @@ import { bool } from 'prop-types';
 
 import { query, where } from "firebase/firestore";
 
-
-//import { EVENTS } from "./events";
-
 function AccountMenu({onClickLogout, onClickSetting}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -207,10 +204,7 @@ export default function Home() {
     if (action === "edit") {
       /** PUT event to remote DB */
       const docRef = await doc(db, "schedules", String(event.event_id));
-
-      //console.log("event_id = ", String(event.event_id))
       console.log("edit")
-
 
       try {
         await updateDoc(docRef, {
@@ -224,9 +218,6 @@ export default function Home() {
       } catch (e) {
         console.error("Error editting document: ", e);
       }
-
-
-
 
     } else if (action === "create") {
 
@@ -265,12 +256,6 @@ export default function Home() {
         if (isFail) {
           reject("Ops... Faild");
         } else {
-          /*
-          resolv({
-            ...event,
-            event_id: event.event_id || Math.random()
-          });
-          */          
           resolv({
             ...event,
             event_id: tmp_id || Math.random()
@@ -287,25 +272,14 @@ export default function Home() {
     originalEvent
   ) => {
 
-    //console.log("droppedOn =", droppedOn);
     console.log("updatedEvent.start =", updatedEvent.start);
     console.log("updatedEvent.end =", updatedEvent.end);
-    //console.log("originalEvent =", originalEvent);
     console.log("event_id = ", updatedEvent.event_id)
 
     var isFail = await true
-    //const docRef = await db.collection('schedules').doc('updatedEvent.event_id')
     const docRef = await doc(db, "schedules", String(originalEvent.event_id));
-    //const docRef = await query(collection(db, "schedules"), where("event_id", "==", String(updatedEvent.event_id)));
 
     try {
-      /*
-      await docRef.update({
-        start: updatedEvent.start,
-        end: updatedEvent.end,
-        title: originalEvent.title
-      })
-      */
       await updateDoc(docRef, {
         start: updatedEvent.start,
         end: updatedEvent.end,
@@ -316,9 +290,7 @@ export default function Home() {
     } catch (e) {
       console.error("Error updating document: ", e);
     }
-
     return new Promise((resolv, reject) => {
-
       // Make it slow
       setTimeout(() => {
         if (isFail) {
