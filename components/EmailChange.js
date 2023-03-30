@@ -32,16 +32,35 @@ export default function SettingDialog({isOpen, onClickClose}) {
       password // ←ここに入力されたパスワード
     )
     await reauthenticateWithCredential(user, credential)
-    await deleteUser(user).then(() => {
+    deleteUser(user).then(() => {
       signOut(auth)
       router.push("/signup")      
     }).catch((error) => {
       console.log(error)
     });
   };
+
+
+  const handleClickUpdateAccount = async () => {
+    const credential = await EmailAuthProvider.credential(
+      user.email, // ←ここに入力されたメールアドレス
+      password // ←ここに入力されたパスワード
+    )
+
+    await reauthenticateWithCredential(user, credential)
+    //await updatePassword(user, newPassword)
+    try {
+      await updateEmail(user, email)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
   }
+
+
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
   }
@@ -66,6 +85,9 @@ export default function SettingDialog({isOpen, onClickClose}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={onClickClose}>キャンセル</Button>
+          <Button onClick={handleClickUpdateAccount} autoFocus>
+            更新
+          </Button>
           <Button onClick={handleDeleteUser} autoFocus>
             アカウント削除
           </Button>

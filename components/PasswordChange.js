@@ -15,7 +15,7 @@ import { deleteUser, EmailAuthProvider, reauthenticateWithCredential, currentUse
 import { auth } from "../firebase/init"
 import { signOut, updateEmail } from "firebase/auth"
 
-export default function SettingDialog({isOpen, onClickClose}) {
+export default function AccountDelDialog({isOpen, onClickClose}) {
   const router = useRouter()
   const user = auth.currentUser;
 
@@ -32,7 +32,7 @@ export default function SettingDialog({isOpen, onClickClose}) {
       password // ←ここに入力されたパスワード
     )
     await reauthenticateWithCredential(user, credential)
-    await deleteUser(user).then(() => {
+    deleteUser(user).then(() => {
       signOut(auth)
       router.push("/signup")      
     }).catch((error) => {
