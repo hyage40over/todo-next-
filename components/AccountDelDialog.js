@@ -4,9 +4,12 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+
+
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -72,13 +75,14 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
         onClose={onClickClose}
         >
         <DialogTitle id="Setting">
-          {"Account Setting"}
+          {"カウントの削除"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="Setting-text">
-          アカウント{user?.email}を削除します。
+            アカウント{user?.email}を削除します。
           </DialogContentText>
-          <Stack spacing={2}>
+          <Stack spacing={5}>
+            <InputLabel><br/></InputLabel>
             <TextField id="password1" label="パスワード1" variant="outlined" type="password" value={password1} onChange={handlePassword1Change}/>
             <TextField id="password2" label="パスワード2" variant="outlined" type="password" value={password2} onChange={handlePassword2Change} />
           </Stack>
