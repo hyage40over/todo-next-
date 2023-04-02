@@ -7,7 +7,10 @@ import { currentUser } from "firebase/auth"
 import Button from '@mui/material/Button';
 
 import LogOffDialog from "../components/LogOffDialog"
-import SettingDialog from "../components/SettingDialog"
+
+
+
+
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -326,7 +329,6 @@ export default function Home() {
           <InputWithIcon />
           <AccountMenu onClickLogout={handleClickLogoutOpen} onClickSetting={handleClickSettingOpen} />
           <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
-          <SettingDialog isOpen={openSetting} onClickClose={handleCloseSetting} />
           {/*<InputDialog />*/}
         </div>
         <Scheduler
