@@ -9,38 +9,60 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+
 
 import { useRouter } from "next/router"
-import { deleteUser, EmailAuthProvider, reauthenticateWithCredential, currentUser } from "firebase/auth";
+import { deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth } from "../firebase/init"
-import { signOut, updateEmail } from "firebase/auth"
+import { signOut } from "firebase/auth"
+
+const ErrorMessageAlert = (props) => {
+  if (props.errorMessage == "") {
+    return;
+  }
+  return (
+    <Box sx={{ marginY: 5 }}>
+      <Alert severity="error">{props.errorMessage}</Alert>
+    </Box>
+  );
+};
+
 
 export default function AccountDelDialog({isOpen, onClickClose}) {
   const router = useRouter()
   const user = auth.currentUser;
 
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState(user?.email);
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
   const handleDeleteUser = async () => {
-    //const userr = await currentUser
-    const credential = await EmailAuthProvider.credential(
-      user.email, // ←ここに入力されたメールアドレス
-      password // ←ここに入力されたパスワード
-    )
-    await reauthenticateWithCredential(user, credential)
-    deleteUser(user).then(() => {
-      signOut(auth)
-      router.push("/signup")      
-    }).catch((error) => {
-      console.log(error)
-    });
+
+    if (password1 === password2){
+      const credential = await EmailAuthProvider.credential(
+        user.email, // ←ここに入力されたメールアドレス
+        password1 // ←ここに入力されたパスワード
+      )
+      await reauthenticateWithCredential(user, credential)
+      deleteUser(user).then(() => {
+        signOut(auth)
+        router.push("/signup")      
+      }).catch((error) => {
+        console.log("errorCode: ", error.code);
+        console.log("errorMessage: ", error.message);
+        setErrorMessage(error.message);
+      });
+    }else{
+      console.log("パスワードが一致しません")
+      setErrorMessage("パスワードが一致しません");
+    }
   };
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value)
+  const handlePassword1Change = (e) => {
+    setPassword1(e.target.value)
   }
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value)
+  const handlePassword2Change = (e) => {
+    setPassword2(e.target.value)
   }
 
   return (
@@ -54,11 +76,11 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="Setting-text">
-          {user?.email}のアカウント設定
+          アカウント{user?.email}を削除します。
           </DialogContentText>
           <Stack spacing={2}>
-            <TextField id="email" label="e-mail" variant="outlined" value={email} onChange={handleEmailChange}/>
-            <TextField id="password" label="パスワード" variant="outlined" type="password" value={password} onChange={handlePasswordChange} />
+            <TextField id="password1" label="パスワード1" variant="outlined" type="password" value={password1} onChange={handlePassword1Change}/>
+            <TextField id="password2" label="パスワード2" variant="outlined" type="password" value={password2} onChange={handlePassword2Change} />
           </Stack>
         </DialogContent>
         <DialogActions>
@@ -67,6 +89,7 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
             アカウント削除
           </Button>
         </DialogActions>
+        <ErrorMessageAlert errorMessage={errorMessage} />
       </Dialog>
     </div>
   );

@@ -154,7 +154,6 @@ function InputWithIcon() {
 export default function Home() {
   const { user } = useAuthContext();
   const [openLogout, setOpenLogout] = React.useState(false);
-  const [openSetting, setOpenSetting] = React.useState(false);
   const scheduler = useScheduler();
   const setEvents = scheduler.setEvents;
 
@@ -190,9 +189,6 @@ export default function Home() {
   const handleClickSettingOpen = () => {
     // setOpenSetting(true);
     Router.push("/setting");
-  };
-  const handleCloseSetting = () => {
-    setOpenSetting(false);
   };
 
   console.log("home user------", user);
