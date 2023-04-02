@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -37,9 +37,11 @@ export default function SignUp() {
   const router = useRouter();
   const { user } = useAuthContext()
 
-  if (user) {
-    router.push('/home')
-  }
+  useEffect(() => {
+    if (user) {
+      router.push('/home')
+    }
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

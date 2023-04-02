@@ -1,12 +1,13 @@
 import * as React from 'react';
+import Router from 'next/router'
 import Container from '@mui/material/Container';
 import { useAuthContext } from "../src/context/AuthContext"
+import { currentUser } from "firebase/auth"
 
 import Button from '@mui/material/Button';
 
 import LogOffDialog from "../components/LogOffDialog"
 import SettingDialog from "../components/SettingDialog"
-//import InputDialog from "../components/InputDialog"
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -30,11 +31,8 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
-import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../firebase/init";
-import { bool } from 'prop-types';
-
-import { query, where } from "firebase/firestore";
+import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db, auth } from "../firebase/init";
 
 function AccountMenu({onClickLogout, onClickSetting}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -112,9 +110,9 @@ function AccountMenu({onClickLogout, onClickSetting}) {
           Add another account
         </MenuItem>
         <MenuItem onClick={onClickSetting}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
           Settings
         </MenuItem>
         <MenuItem onClick={onClickLogout}>
@@ -130,7 +128,6 @@ function AccountMenu({onClickLogout, onClickSetting}) {
 
 function InputWithIcon() {
   const { user } = useAuthContext()
-  console.log("user---------", user);
   return (
     <Box sx={{ '& > :not(style)': { m: 1 } }}>
       <TextField
@@ -152,14 +149,20 @@ function InputWithIcon() {
 }
 
 export default function Home() {
+  const { user } = useAuthContext();
   const [openLogout, setOpenLogout] = React.useState(false);
   const [openSetting, setOpenSetting] = React.useState(false);
   const scheduler = useScheduler();
   const setEvents = scheduler.setEvents;
 
   const initSchedule = async () => {
+    if (!user) {
+      return;
+    }
     // fireStoreからDBを取得
-    const snapshot = await getDocs(collection(db, "schedules"));
+    const q = await query(collection(db, "schedules"), where("uid", "==", user?.uid));
+    const snapshot = await getDocs(q);
+
     const firestoreResponse = [];
     snapshot.forEach((doc) => {
       firestoreResponse.push({
@@ -173,7 +176,7 @@ export default function Home() {
   }
   React.useEffect(() => {
     initSchedule();
-  }, [])
+  }, [user])
   const handleClickLogoutOpen = () => {
     setOpenLogout(true);
     console.log("Logout")
@@ -182,25 +185,23 @@ export default function Home() {
     setOpenLogout(false);
   };
   const handleClickSettingOpen = () => {
-    setOpenSetting(true);
-    console.log("Setting")
+    // setOpenSetting(true);
+    Router.push("/setting");
   };
   const handleCloseSetting = () => {
     setOpenSetting(false);
   };
+
+  console.log("home user------", user);
 
   // handle Confirm
   const handleConfirm = async (
     event,
     action
   ) => {
+    var tmp_id = await 0;
+    var isFail = await true;
 
-    console.log("event.event_id =", event.event_id);
-    console.log("event.start =", event.start);
-    console.log("event.end =", event.end);
-
-    var tmp_id = await 0
-    var isFail = await true
     if (action === "edit") {
       /** PUT event to remote DB */
       const docRef = await doc(db, "schedules", String(event.event_id));
@@ -220,12 +221,13 @@ export default function Home() {
       }
 
     } else if (action === "create") {
-
       console.log("create")
 
       /**POST event to remote DB */
       try {
+        const user = await auth.currentUser;
         const docRef = await addDoc(collection(db, "schedules"), {
+          uid: user.uid,
           start: event.start,
           end: event.end,
           title: event.title
@@ -238,7 +240,6 @@ export default function Home() {
         console.error("Error adding document: ", e);
       }
     }
-
 
     /**
      * Make sure to return 4 mandatory fields:
@@ -367,7 +368,6 @@ export default function Home() {
                 );
               }
             }}
-            // events={events}
           />
     </Container>
   );

@@ -22,9 +22,6 @@ export default function SettingDialog({isOpen, onClickClose}) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState(user?.email);
 
-  console.log("user----------", user);
-  console.log("password----------", password);
-
   const handleDeleteUser = async () => {
     //const userr = await currentUser
     const credential = await EmailAuthProvider.credential(
