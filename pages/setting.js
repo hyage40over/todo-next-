@@ -14,9 +14,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import AccountDelDialog from "../components/AccountDelDialog"
-
-
-
+import EmailChange from "../components/EmailChange"
+import PasswordChange from "../components/PasswordChange"
 
 function InputWithIcon() {
   const { user } = useAuthContext()
@@ -43,22 +42,39 @@ function InputWithIcon() {
 export default function Setting() {
   const { user } = useAuthContext()
   const [openAccountDel, setOpenAccountDel] = React.useState(false);
+  const [openEmailChange, setOpenEmailChange] = React.useState(false);
+  const [openPasswordChange, setOpenPasswordChange] = React.useState(false);
+
   const handleClickHome = () => {
     Router.push("/home");
   };
   const handleCloseAccontDel = () => {
     setOpenAccountDel(false);
-    //ErrorMessageAlert("")    
   };
   const handleClickAccountDelOpen = () => {
     setOpenAccountDel(true);
   };
+  const handleCloseEmailChange = () => {
+    setOpenEmailChange(false);
+  };
+  const handleClickEmailChangeOpen = () => {
+    setOpenEmailChange(true);
+  };
+  const handleClosePasswordChange = () => {
+    setOpenPasswordChange(false);
+  };
+  const handleClickPasswordChangeOpen = () => {
+    setOpenPasswordChange(true);
+  };
+
   return (
     <Container>
         <div align="right">
           <InputWithIcon />
         </div>
         <AccountDelDialog isOpen={openAccountDel} onClickClose={handleCloseAccontDel} />
+        <EmailChange isOpen={openEmailChange} onClickClose={handleCloseEmailChange} />
+        <PasswordChange isOpen={openPasswordChange} onClickClose={handleClosePasswordChange} />
         <div align="center">
           <h1 id="Setting-text">
             {user?.email}のアカウント設定
@@ -82,7 +98,7 @@ export default function Setting() {
                 <TextField id="email" variant="outlined" InputProps={{readOnly: true}} value={user?.email} />
               </div>
               <div>
-                <Button variant="contained">E-MAIl 変更</Button>        
+                <Button variant="contained"  onClick={handleClickEmailChangeOpen}>E-MAIl 変更</Button>        
               </div>
             </Box>
             <Box 
@@ -103,7 +119,7 @@ export default function Setting() {
                 <TextField id="password" variant="outlined" type="password" InputProps={{readOnly: true}} value="dmy" />
               </div>
               <div>
-                <Button variant="contained">password 変更</Button>        
+                <Button variant="contained" onClick={handleClickPasswordChangeOpen}>password 変更</Button>        
               </div>
             </Box>
             <Box 
