@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
 
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -15,47 +14,73 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 
-
 import { useRouter } from "next/router"
 import { deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth } from "../firebase/init"
 import { signOut } from "firebase/auth"
 
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+
 const ErrorMessageAlert = (props) => {
+  var [open, setOpen] = useState(true);
   if (props.errorMessage == "") {
-    return;
+    return
   }
   return (
-    <Box sx={{ marginY: 5 }}>
-      <Alert severity="error">{props.errorMessage}</Alert>
+    <Box sx={{ width: '100%' }}>
+      <Collapse in={open}>
+        <Alert
+          severity="error"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          {props.errorMessage}
+        </Alert>
+      </Collapse>
     </Box>
-  );
-};
-
+  )
+}
 
 export default function AccountDelDialog({isOpen, onClickClose}) {
   const router = useRouter()
   const user = auth.currentUser;
-
   const [errorMessage, setErrorMessage] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-  const handleDeleteUser = async () => {
 
+  const handleDeleteUser = async () => {
     if (password1 === password2){
-      const credential = await EmailAuthProvider.credential(
-        user.email, // ←ここに入力されたメールアドレス
-        password1 // ←ここに入力されたパスワード
-      )
-      await reauthenticateWithCredential(user, credential)
-      deleteUser(user).then(() => {
-        signOut(auth)
-        router.push("/signup")      
-      }).catch((error) => {
-        console.log("errorCode: ", error.code);
-        console.log("errorMessage: ", error.message);
+      try {
+        const credential = await EmailAuthProvider.credential(
+          user.email, // ←ここに入力されたメールアドレス
+          password1 // ←ここに入力されたパスワード
+        )
+        await reauthenticateWithCredential(user, credential)
+        deleteUser(user).then(() => {
+          signOut(auth)
+          router.push("/signup")      
+        }).catch((error) => {
+          console.log("errorCode: ", error.code);
+          console.log("errorMessage: ", error.message);
+          setErrorMessage(error.message);
+        });
+      } catch (error) {
         setErrorMessage(error.message);
-      });
+        console.error("Error adding document: ", error);
+      }
     }else{
       console.log("パスワードが一致しません")
       setErrorMessage("パスワードが一致しません");
@@ -67,7 +92,6 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
   const handlePassword2Change = (e) => {
     setPassword2(e.target.value)
   }
-
   return (
     <div>
       <Dialog
@@ -82,9 +106,9 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
             アカウント{user?.email}を削除します。
           </DialogContentText>
           <Stack spacing={5}>
-            <InputLabel><br/></InputLabel>
-            <TextField id="password1" label="パスワード1" variant="outlined" type="password" value={password1} onChange={handlePassword1Change}/>
-            <TextField id="password2" label="パスワード2" variant="outlined" type="password" value={password2} onChange={handlePassword2Change} />
+            <InputLabel>確認用にパスワードを入力してください<br/></InputLabel>
+            <TextField id="password1" label="パスワード" variant="outlined" type="password" value={password1} onChange={handlePassword1Change}/>
+            <TextField id="password2" label="確認用" variant="outlined" type="password" value={password2} onChange={handlePassword2Change}/>
           </Stack>
         </DialogContent>
         <DialogActions>
