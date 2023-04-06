@@ -33,7 +33,7 @@ const ErrorMessageAlert = (props) => {
     <Box sx={{ width: '100%' }}>
       <Collapse in={isopen}>
         <Alert
-          severity="error"
+          severity={props.type}
           sx={{ mb: 2 }}
         >
           {props.errorMessage}
@@ -43,15 +43,28 @@ const ErrorMessageAlert = (props) => {
   )
 }
 
+
 export default function AccountDelDialog({isOpen, onClickClose}) {
   const router = useRouter()
   const user = auth.currentUser;
   const [errorMessage, setErrorMessage] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-  
+  const [msgtype, setMsgtype] = useState("");
+
+  const handlePassword1Change = (e) => {
+    setErrorMessage("")
+    setMsgtype("info")
+    setPassword1(e.target.value)
+  }
+  const handlePassword2Change = (e) => {
+    setErrorMessage("")
+    setMsgtype("info")
+    setPassword2(e.target.value)
+  }
   const handleDeleteUser = async () => {
     setErrorMessage("")
+    setMsgtype("error")
     if (password1 === password2){
       try {
         const credential = await EmailAuthProvider.credential(
@@ -60,30 +73,28 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
         )
         await reauthenticateWithCredential(user, credential)
         deleteUser(user).then(() => {
+          setErrorMessage("アカウントを削除しました");
+          setMsgtype("success")
           signOut(auth)
           router.push("/signup")      
+
         }).catch((error) => {
           console.log("errorCode: ", error.code);
           console.log("errorMessage: ", error.message);
           setErrorMessage(error.message);
+          setMsgtype("error")
         });
       } catch (error) {
         setErrorMessage(error.message);
+        setMsgtype("error")
         console.error("Error adding document: ", error);
       }
     }else{
       console.log("パスワードが一致しません")
       setErrorMessage("パスワードが一致しません");
+      setMsgtype("error")
     }
   };
-  const handlePassword1Change = (e) => {
-    setErrorMessage("")
-    setPassword1(e.target.value)
-  }
-  const handlePassword2Change = (e) => {
-    setErrorMessage("")
-    setPassword2(e.target.value)
-  }
   return (
     <div>
       <Dialog
@@ -109,7 +120,7 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
             アカウント削除
           </Button>
         </DialogActions>
-        <ErrorMessageAlert errorMessage={errorMessage} />
+        <ErrorMessageAlert type={msgtype} errorMessage={errorMessage} />
       </Dialog>
     </div>
   );

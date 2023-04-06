@@ -116,7 +116,7 @@ export default function Setting() {
                 <InputLabel>パスワードの設定</InputLabel>
               </div>
               <div>
-                <TextField id="password" variant="outlined" type="password" InputProps={{readOnly: true}} value="dmy" />
+                <TextField id="password" variant="outlined" type="password" InputProps={{readOnly: true}} value="dmydmy" />
               </div>
               <div>
                 <Button variant="contained" onClick={handleClickPasswordChangeOpen}>password 変更</Button>        

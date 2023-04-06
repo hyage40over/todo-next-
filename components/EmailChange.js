@@ -14,10 +14,9 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 
-import { useRouter } from "next/router"
-import { deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth } from "../firebase/init"
-import { signOut } from "firebase/auth"
+import { updateEmail } from "firebase/auth"
 
 import Collapse from '@mui/material/Collapse';
 
@@ -33,7 +32,7 @@ const ErrorMessageAlert = (props) => {
     <Box sx={{ width: '100%' }}>
       <Collapse in={isopen}>
         <Alert
-          severity="error"
+          severity={props.type}
           sx={{ mb: 2 }}
         >
           {props.errorMessage}
@@ -44,14 +43,31 @@ const ErrorMessageAlert = (props) => {
 }
 
 export default function EmailChange({isOpen, onClickClose}) {
-  const router = useRouter()
   const user = auth.currentUser;
   const [errorMessage, setErrorMessage] = useState("");
+  const [newemail, setEmail] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
+  const [msgtype, setMsgtype] = useState("");
   
-  const handleDeleteUser = async () => {
+  const handlenewEmailChange = (e) => {
     setErrorMessage("")
+    setMsgtype("info")
+    setEmail(e.target.value)
+  }
+  const handlePassword1Change = (e) => {
+    setErrorMessage("")
+    setMsgtype("info")
+    setPassword1(e.target.value)
+  }
+  const handlePassword2Change = (e) => {
+    setErrorMessage("")
+    setMsgtype("info")
+    setPassword2(e.target.value)
+  }
+  const handleChangePassword = async () => {
+    setErrorMessage("")
+    setMsgtype("info")
     if (password1 === password2){
       try {
         const credential = await EmailAuthProvider.credential(
@@ -59,31 +75,27 @@ export default function EmailChange({isOpen, onClickClose}) {
           password1 // ←ここに入力されたパスワード
         )
         await reauthenticateWithCredential(user, credential)
-        deleteUser(user).then(() => {
-          signOut(auth)
-          router.push("/signup")      
+        updateEmail(auth.currentUser, newemail).then(() => {
+          setErrorMessage("E-Mailを変更しました");
+          setMsgtype("success")
         }).catch((error) => {
           console.log("errorCode: ", error.code);
           console.log("errorMessage: ", error.message);
           setErrorMessage(error.message);
+          setMsgtype("error")
         });
       } catch (error) {
         setErrorMessage(error.message);
+        setMsgtype("error")
         console.error("Error adding document: ", error);
       }
     }else{
       console.log("パスワードが一致しません")
       setErrorMessage("パスワードが一致しません");
+      setMsgtype("error")
+
     }
   };
-  const handlePassword1Change = (e) => {
-    setErrorMessage("")
-    setPassword1(e.target.value)
-  }
-  const handlePassword2Change = (e) => {
-    setErrorMessage("")
-    setPassword2(e.target.value)
-  }
   return (
     <div>
       <Dialog
@@ -91,25 +103,26 @@ export default function EmailChange({isOpen, onClickClose}) {
         onClose={onClickClose}
         >
         <DialogTitle id="Setting">
-          {"カウントの削除"}
+          {"アカウントのE-Mail変更"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="Setting-text">
-            アカウント{user?.email}を削除します。
+            アカウント{user?.email}のE-Mailを変更します。
           </DialogContentText>
           <Stack spacing={5}>
             <InputLabel>確認用にパスワードを入力してください<br/></InputLabel>
+            <TextField id="newemail" label="新しいE-Mail" variant="outlined" value={newemail} onChange={handlenewEmailChange}/>
             <TextField id="password1" label="パスワード" variant="outlined" type="password" value={password1} onChange={handlePassword1Change}/>
             <TextField id="password2" label="確認用" variant="outlined" type="password" value={password2} onChange={handlePassword2Change}/>
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClickClose}>キャンセル</Button>
-          <Button onClick={handleDeleteUser} autoFocus>
-            アカウント削除
+          <Button onClick={onClickClose}>閉じる</Button>
+          <Button onClick={handleChangePassword} autoFocus>
+            E-Mailの更新
           </Button>
         </DialogActions>
-        <ErrorMessageAlert errorMessage={errorMessage} />
+        <ErrorMessageAlert type={msgtype}  errorMessage={errorMessage} />
       </Dialog>
     </div>
   );
