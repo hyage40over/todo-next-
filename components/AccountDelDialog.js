@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -19,32 +19,22 @@ import { deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "fir
 import { auth } from "../firebase/init"
 import { signOut } from "firebase/auth"
 
-import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
-import CloseIcon from '@mui/icons-material/Close';
 
 const ErrorMessageAlert = (props) => {
-  var [open, setOpen] = useState(true);
+  var [isopen, setOpen] = useState(true);
+
   if (props.errorMessage == "") {
+    isopen = false
     return
+  }else{
+    isopen = true
   }
   return (
     <Box sx={{ width: '100%' }}>
-      <Collapse in={open}>
+      <Collapse in={isopen}>
         <Alert
           severity="error"
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
           sx={{ mb: 2 }}
         >
           {props.errorMessage}
@@ -60,8 +50,11 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
   const [errorMessage, setErrorMessage] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-
+  //const [ErrorOpen, setError] = useState(false);
+  
   const handleDeleteUser = async () => {
+    setErrorMessage("")
+    //setError(false);          
     if (password1 === password2){
       try {
         const credential = await EmailAuthProvider.credential(
@@ -76,20 +69,25 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
           console.log("errorCode: ", error.code);
           console.log("errorMessage: ", error.message);
           setErrorMessage(error.message);
+          //setError(true);          
         });
       } catch (error) {
         setErrorMessage(error.message);
+        //setError(true);          
         console.error("Error adding document: ", error);
       }
     }else{
       console.log("パスワードが一致しません")
       setErrorMessage("パスワードが一致しません");
+      //setError(true);          
     }
   };
   const handlePassword1Change = (e) => {
+    setErrorMessage("")
     setPassword1(e.target.value)
   }
   const handlePassword2Change = (e) => {
+    setErrorMessage("")
     setPassword2(e.target.value)
   }
   return (
