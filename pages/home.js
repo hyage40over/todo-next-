@@ -2,15 +2,9 @@ import * as React from 'react';
 import Router from 'next/router'
 import Container from '@mui/material/Container';
 import { useAuthContext } from "../src/context/AuthContext"
-import { currentUser } from "firebase/auth"
 
 import Button from '@mui/material/Button';
-
 import LogOffDialog from "../components/LogOffDialog"
-
-
-
-
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -49,8 +43,6 @@ function AccountMenu({onClickLogout, onClickSetting}) {
   return (
     <React.Fragment>
       <Box sx={{ display: undefined, alignItems: undefined, textAlign: undefined }} >
-        {/*<Typography sx={{ minWidth: 100 }}>Contact</Typography>*/}
-        {/*<Typography sx={{ minWidth: 100 }}>Profile</Typography>*/}
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -325,11 +317,8 @@ export default function Home() {
           <InputWithIcon />
           <AccountMenu onClickLogout={handleClickLogoutOpen} onClickSetting={handleClickSettingOpen} />
           <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
-          {/*<InputDialog />*/}
         </div>
         <Scheduler
-            //disableViewNavigator = {false}
-            //navigationPickerProps = {"renderInput"}
             locale={ja}
             onConfirm={handleConfirm}
             onEventDrop={handleEventDrop}
@@ -360,7 +349,6 @@ export default function Home() {
                       onClick();
                     }}
                     disableRipple={disabled}
-                    // disabled={disabled}
                     {...restProps}
                   ></Button>
                 );

@@ -22,8 +22,7 @@ import { signOut } from "firebase/auth"
 import Collapse from '@mui/material/Collapse';
 
 const ErrorMessageAlert = (props) => {
-  var [isopen, setOpen] = useState(true);
-
+  var isopen
   if (props.errorMessage == "") {
     isopen = false
     return
@@ -50,11 +49,9 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
   const [errorMessage, setErrorMessage] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-  //const [ErrorOpen, setError] = useState(false);
   
   const handleDeleteUser = async () => {
     setErrorMessage("")
-    //setError(false);          
     if (password1 === password2){
       try {
         const credential = await EmailAuthProvider.credential(
@@ -69,17 +66,14 @@ export default function AccountDelDialog({isOpen, onClickClose}) {
           console.log("errorCode: ", error.code);
           console.log("errorMessage: ", error.message);
           setErrorMessage(error.message);
-          //setError(true);          
         });
       } catch (error) {
         setErrorMessage(error.message);
-        //setError(true);          
         console.error("Error adding document: ", error);
       }
     }else{
       console.log("パスワードが一致しません")
       setErrorMessage("パスワードが一致しません");
-      //setError(true);          
     }
   };
   const handlePassword1Change = (e) => {
