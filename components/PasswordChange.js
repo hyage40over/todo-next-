@@ -96,7 +96,6 @@ export default function PasswordChange({isOpen, onClickClose}) {
       console.log("パスワードが一致しません")
       setErrorMessage("パスワードが一致しません");
       setMsgtype("error")
-
     }
   };
   return (
@@ -125,7 +124,7 @@ export default function PasswordChange({isOpen, onClickClose}) {
             パスワード更新
           </Button>
         </DialogActions>
-        <ErrorMessageAlert type={msgtype}  errorMessage={errorMessage} />
+        <ErrorMessageAlert type={msgtype} errorMessage={errorMessage} />
       </Dialog>
     </div>
   );
