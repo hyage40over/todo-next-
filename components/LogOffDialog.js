@@ -13,7 +13,15 @@ export default function LogOffDialog({isOpen, onClickClose}) {
   const router = useRouter()
   const handleClickLogout = async () => {
     console.log("handleClickLogout")
+    //await signOut(auth)
     await signOut(auth)
+      .then(() => {
+        console.log("Sign-out successful.");
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+
   };
 
   return (
