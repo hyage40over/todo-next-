@@ -92,13 +92,6 @@ function AccountMenu({onClickLogout, onClickSetting}) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
@@ -127,6 +120,7 @@ function InputWithIcon() {
     <Box sx={{ '& > :not(style)': { m: 1 } }}>
       <TextField
         id="outlined-read-only-input"
+        style = {{width: 350}}
         label="アカウント"
         InputProps={{
           readOnly: true,

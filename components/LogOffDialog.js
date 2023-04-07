@@ -12,6 +12,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 export default function LogOffDialog({isOpen, onClickClose}) {
   const router = useRouter()
   const handleClickLogout = async () => {
+    console.log("handleClickLogout")
     await signOut(auth)
   };
 

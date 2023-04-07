@@ -23,6 +23,7 @@ function InputWithIcon() {
     <Box sx={{ '& > :not(style)': { m: 1 } }}>
       <TextField
         id="outlined-read-only-input"
+        style = {{width: 350}}
         label="アカウント"
         InputProps={{
           readOnly: true,
@@ -95,7 +96,7 @@ export default function Setting() {
                 <InputLabel>E-Mailの設定</InputLabel>
               </div>
               <div>
-                <TextField id="email" variant="outlined" InputProps={{readOnly: true}} value={user?.email} />
+                <TextField id="email" style = {{width: 350}} variant="outlined" InputProps={{readOnly: true}} value={user?.email} />
               </div>
               <div>
                 <Button variant="contained"  onClick={handleClickEmailChangeOpen}>E-MAIl 変更</Button>        
@@ -116,7 +117,7 @@ export default function Setting() {
                 <InputLabel>パスワードの設定</InputLabel>
               </div>
               <div>
-                <TextField id="password" variant="outlined" type="password" InputProps={{readOnly: true}} value="dmydmy" />
+                <TextField id="password" style = {{width: 350}} variant="outlined" type="password" InputProps={{readOnly: true}} value="dmydmy" />
               </div>
               <div>
                 <Button variant="contained" onClick={handleClickPasswordChangeOpen}>password 変更</Button>        
