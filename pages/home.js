@@ -10,7 +10,10 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 
 import TextField from '@mui/material/TextField';
+
 import { Scheduler, useScheduler } from "@aldabil/react-scheduler";
+//import Scheduler from "@aldabil/react-scheduler";
+//import type { SchedulerRef } from "@aldabil/react-scheduler/types"
 
 import ja from 'date-fns/locale/ja'
 
@@ -132,7 +135,9 @@ function InputWithIcon() {
 export default function Home() {
   const { user } = useAuthContext();
   const [openLogout, setOpenLogout] = React.useState(false);
+
   const scheduler = useScheduler();
+
   const setEvents = scheduler.setEvents;
 
   const initSchedule = async () => {
@@ -297,50 +302,80 @@ export default function Home() {
     });
   }      
 
+  //const calendarRef = useRef<SchedulerRef>(null);
+
   return (
     <Container>
-        <div align="right">
-          <InputWithIcon />
-          <AccountMenu onClickLogout={handleClickLogoutOpen} onClickSetting={handleClickSettingOpen} />
-          <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
+      <div align="right">
+        <InputWithIcon />
+        <AccountMenu onClickLogout={handleClickLogoutOpen} onClickSetting={handleClickSettingOpen} />
+        <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
+      </div>
+
+
+      {/*
+      <Fragment>
+        <div>
+          <Button onClick={()=>{
+            calendarRef.current.scheduler.handleState("day", "view");
+          }}>
+            Change View
+          </Button>
+          <Button onClick={()=>{
+            calendarRef.current.scheduler.triggerDialog(true, {
+              start: "2023/4/1",
+              end: "2023/4/1"
+            })
+          }}>
+            Add Event Tomorrow
+          </Button>
         </div>
+        */}  
+
+
         <Scheduler
-            locale={ja}
-            onConfirm={handleConfirm}
-            onEventDrop={handleEventDrop}
-            onDelete={handleDelete}
-            week={{
-              weekDays: [0, 1, 2, 3, 4, 5, 6],
-              weekStartOn: 0,
-              startHour: 9,
-              endHour: 17,
-              step: 60,
-              // navigation: true,
-              cellRenderer: ({ height, start, onClick, ...props }) => {
-                // Fake some condition up
-                const hour = start.getHours();
-                const disabled = hour === 12;
-                const restProps = disabled ? {} : props;
-                return (
-                  <Button
-                    style={{
-                      height: "100%",
-                      background: disabled ? "#eee" : "transparent",
-                      cursor: disabled ? "not-allowed" : "pointer"
-                    }}
-                    onClick={() => {
-                      if (disabled) {
-                        return alert("Opss");
-                      }
-                      onClick();
-                    }}
-                    disableRipple={disabled}
-                    {...restProps}
-                  ></Button>
-                );
-              }
-            }}
+
+          //ref={calendarRef}
+
+          locale={ja}
+          onConfirm={handleConfirm}
+          onEventDrop={handleEventDrop}
+          onDelete={handleDelete}
+          week={{
+            weekDays: [0, 1, 2, 3, 4, 5, 6],
+            weekStartOn: 0,
+            startHour: 9,
+            endHour: 17,
+            step: 60,
+            navigation: true,
+            cellRenderer: ({ height, start, onClick, ...props }) => {
+              // Fake some condition up
+              const hour = start.getHours();
+              const disabled = hour === 12;
+              const restProps = disabled ? {} : props;
+              return (
+                <Button
+                  style={{
+                    height: "100%",
+                    background: disabled ? "#eee" : "transparent",
+                    cursor: disabled ? "not-allowed" : "pointer"
+                  }}
+                  onClick={() => {
+                    if (disabled) {
+                      return alert("Opss");
+                    }
+                    onClick();
+                  }}
+                  disableRipple={disabled}
+                  {...restProps}
+                ></Button>
+              );
+            }
+          }}
           />
+
+        {/*</Fragment>*/}  
+
     </Container>
-  );
+ );
 }
