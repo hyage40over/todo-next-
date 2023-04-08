@@ -91,23 +91,17 @@ function AccountMenu({onClickLogout, onClickSetting}) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
         <MenuItem onClick={onClickSetting}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
-          Settings
+          アカウント設定
         </MenuItem>
         <MenuItem onClick={onClickLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          ログアウト
         </MenuItem>
       </Menu>
     </React.Fragment>
