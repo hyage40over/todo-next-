@@ -16,6 +16,7 @@ export default function LogOffDialog({isOpen, onClickClose}) {
     //await signOut(auth)
     await signOut(auth)
       .then(() => {
+        router.push('login')
         console.log("Sign-out successful.");
       })
       .catch((err) => {
