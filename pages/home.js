@@ -96,7 +96,7 @@ function AccountMenu({onClickLogout, onClickSetting}) {
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
-          アカウント設定
+          アカウント設定起動
         </MenuItem>
         <MenuItem onClick={onClickLogout}>
           <ListItemIcon>
