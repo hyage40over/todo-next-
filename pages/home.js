@@ -124,11 +124,8 @@ function InputWithIcon() {
 export default function Home() {
   const { user } = useAuthContext();
   const [openLogout, setOpenLogout] = React.useState(false);
-
   const scheduler = useScheduler();
-
   const setEvents = scheduler.setEvents;
-
   const initSchedule = async () => {
     if (!user) {
       return;

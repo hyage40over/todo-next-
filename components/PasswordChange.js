@@ -72,10 +72,8 @@ export default function PasswordChange({isOpen, onClickClose}) {
         await reauthenticateWithCredential(user, credential)
         updatePassword(user, password1).then(() => {
           // Update successful.
-
           setErrorMessage("パスワードを変更しました");
           setMsgtype("success")
-
         }).catch((error) => {
           console.log("errorCode: ", error.code);
           console.log("errorMessage: ", error.message);

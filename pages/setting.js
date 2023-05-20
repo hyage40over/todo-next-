@@ -41,7 +41,6 @@ export default function Setting() {
   const [openAccountDel, setOpenAccountDel] = React.useState(false);
   const [openEmailChange, setOpenEmailChange] = React.useState(false);
   const [openPasswordChange, setOpenPasswordChange] = React.useState(false);
-
   const handleClickHome = () => {
     Router.push("/home");
   };

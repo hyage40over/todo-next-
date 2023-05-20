@@ -21,9 +21,7 @@ export default function LogOffDialog({isOpen, onClickClose}) {
       .catch((err) => {
         console.log(err.message);
       });
-
   };
-
   return (
     <div>
       <Dialog
