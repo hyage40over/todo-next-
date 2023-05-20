@@ -12,8 +12,6 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 
 import { Scheduler, useScheduler } from "@aldabil/react-scheduler";
-//import Scheduler from "@aldabil/react-scheduler";
-//import type { SchedulerRef } from "@aldabil/react-scheduler/types"
 
 import ja from 'date-fns/locale/ja'
 
@@ -301,9 +299,6 @@ export default function Home() {
       }, 3000);
     });
   }      
-
-  //const calendarRef = useRef<SchedulerRef>(null);
-
   return (
     <Container>
       <div align="right">
@@ -311,32 +306,7 @@ export default function Home() {
         <AccountMenu onClickLogout={handleClickLogoutOpen} onClickSetting={handleClickSettingOpen} />
         <LogOffDialog isOpen={openLogout} onClickClose={handleCloseLogout} />
       </div>
-
-
-      {/*
-      <Fragment>
-        <div>
-          <Button onClick={()=>{
-            calendarRef.current.scheduler.handleState("day", "view");
-          }}>
-            Change View
-          </Button>
-          <Button onClick={()=>{
-            calendarRef.current.scheduler.triggerDialog(true, {
-              start: "2023/4/1",
-              end: "2023/4/1"
-            })
-          }}>
-            Add Event Tomorrow
-          </Button>
-        </div>
-        */}  
-
-
         <Scheduler
-
-          //ref={calendarRef}
-
           locale={ja}
           onConfirm={handleConfirm}
           onEventDrop={handleEventDrop}
@@ -373,9 +343,6 @@ export default function Home() {
             }
           }}
           />
-
-        {/*</Fragment>*/}  
-
     </Container>
  );
 }
