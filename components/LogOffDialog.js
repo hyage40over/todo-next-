@@ -1,7 +1,6 @@
 import { useRouter } from "next/router"
 import { signOut } from "firebase/auth"
 import { auth } from "../firebase/init"
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';

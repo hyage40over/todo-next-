@@ -1,18 +1,14 @@
 import * as React from 'react';
 import Router from 'next/router'
-
 import Container from '@mui/material/Container';
 import { useAuthContext } from "../src/context/AuthContext"
-
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
-
 import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-
 import AccountDelDialog from "../components/AccountDelDialog"
 import EmailChange from "../components/EmailChange"
 import PasswordChange from "../components/PasswordChange"

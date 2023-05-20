@@ -16,7 +16,6 @@ import Alert from '@mui/material/Alert';
 import { useRouter } from "next/router"
 import { useAuthContext } from "../src/context/AuthContext"
 
-
 const theme = createTheme();
 
 const ErrorMessageAlert = (props) => {
@@ -119,9 +118,7 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-
       <ErrorMessageAlert errorMessage={errorMessage} />
-
       </Container>
     </ThemeProvider>
   );

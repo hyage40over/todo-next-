@@ -2,31 +2,22 @@ import * as React from 'react';
 import Router from 'next/router'
 import Container from '@mui/material/Container';
 import { useAuthContext } from "../src/context/AuthContext"
-
 import Button from '@mui/material/Button';
 import LogOffDialog from "../components/LogOffDialog"
-
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
-
 import TextField from '@mui/material/TextField';
-
 import { Scheduler, useScheduler } from "@aldabil/react-scheduler";
-
 import ja from 'date-fns/locale/ja'
-
 import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-
 import Menu from '@mui/material/Menu';
-
 import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-
 import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
 import { db, auth } from "../firebase/init";
 

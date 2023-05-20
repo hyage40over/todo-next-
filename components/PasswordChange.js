@@ -1,23 +1,18 @@
 import { useState } from 'react';
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
-
 import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth } from "../firebase/init"
 import { updatePassword } from "firebase/auth"
-
 import Collapse from '@mui/material/Collapse';
 
 const ErrorMessageAlert = (props) => {
