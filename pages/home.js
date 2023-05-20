@@ -168,7 +168,6 @@ export default function Home() {
     setOpenLogout(false);
   };
   const handleClickSettingOpen = () => {
-    // setOpenSetting(true);
     Router.push("/setting");
   };
 
